@@ -1,13 +1,13 @@
 <?php
 
 include_once ('../../config.php');
-$dir = explode('/', __DIR__);
-echo end($dir);exit;
 
+$site = get_site();
+echo $site;exit;
 
-$array_tmp = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
-$site = end($array_tmp);
-$site = is_string($site) ? $site : 'default';
+include_once (CONFIG_PATH . '/' . $site . PHP_EXT);
+
+get_site();exit;
 
 $Mac_ID = isset($_GET['id']) ? addslashes($_GET['id']) : '';
 $fromUserName = isset($_GET['fromUserName']) ? addslashes($_GET['fromUserName']) : '';

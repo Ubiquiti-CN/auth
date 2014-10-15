@@ -33,4 +33,6 @@ $config = array(
     'port' => DB_PORT,
 );
 $mysql = new UbntMysql($config);
+
+define('PHP_EXT', '.php');
 //-----------------------------------系统配置（不要修改）-----------------------------------------
