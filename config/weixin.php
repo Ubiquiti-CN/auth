@@ -15,7 +15,7 @@ define('DEFAULT_URL', 'http://www.ubnt.com.cn');
 /* 微信 开发者中心->服务器配置 Token值 */
 define('WECHAT_TOKEN', '');
 /* 加密用的EncodingAESKey */
-define('WECHAT_ENCODING_AES_Key', '');
+define('WECHAT_ENCODING_AES_KEY', '');
 /* 高级调用功能的app id */
 define('WECHAR_APP_ID', '');
 
