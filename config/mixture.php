@@ -34,9 +34,9 @@ define('WECHAT_ENCODING_ENABLE', false);
 /* 加密用的EncodingAESKey */
 define('WECHAT_ENCODING_AES_KEY', '');
 /* 高级调用功能的app id */
-define('WECHAR_APP_ID', '');
+define('WECHAT_APP_ID', '');
 /* 高级调用功能的app secret */
-define('WECHAT_APP_SECRET', 'eae2b0571bb29aef55691023b7c32df4');
+define('WECHAT_APP_SECRET', '');
 
 /* 微信消息和欢迎内容 */
 define('WEIXIN_AUTH_MESSAGE', '');//当用户发送此内容才能获取返回
