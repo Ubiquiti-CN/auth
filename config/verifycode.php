@@ -10,3 +10,14 @@ define('WIFI_EXPIRED_TIME', 60);//分钟
 
 /* 默认跳转页面 */
 define('DEFAULT_URL', 'http://www.ubnt.com.cn');
+
+//-----------------------------------MySQL----------------------------------------------------
+/* 配置mysql */
+define('DB_HOST', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');//数据库密码
+define('DB_DBNAME', '');//数据库库名
+define('DB_PORT', '3306');
+
+define('VERIFY_CODE_TABLE', '');//验证码表名
+//-----------------------------------MySQL----------------------------------------------------

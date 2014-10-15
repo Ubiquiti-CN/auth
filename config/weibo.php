@@ -20,24 +20,3 @@ define('WEIBO_MESSAGE', '');
 define('WEIBO_SEND_ERROR_MESSAGE', '');
 define('WEIBO_FOLLOW_ERROR_MESSAGE', '');
 //-----------------------------------微博------------------------------------------------------
-
-//-----------------------------------MySQL----------------------------------------------------
-/* 配置mysql */
-define('DB_HOST', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');//数据库密码
-define('DB_DBNAME', '');//数据库库名
-define('DB_PORT', '3306');
-
-define('WEIXIN_TABLE', '');//微信表名
-define('VERIFY_CODE_TABLE', '');//验证码表名
-//-----------------------------------MySQL----------------------------------------------------
-
-$config = array(
-    'host' => DB_HOST,
-    'user' => DB_USERNAME,
-    'pass' => DB_PASSWORD,
-    'name' => DB_DBNAME,
-    'port' => DB_PORT,
-);
-$mysql = new UbntMysql($config);
