@@ -8,6 +8,7 @@ define('UNIFI_PASSWORD', '');
 //-----------------------------------UniFi----------------------------------------------------
 
 //-----------------------------------系统配置（不要修改）-----------------------------------------
+define('PHP_EXT', '.php');
 define('ROOT_PATH', dirname(__FILE__));
 define('DEPS_PATH', ROOT_PATH . '/deps');
 define('SITES_PATH', ROOT_PATH . '/s');
@@ -20,19 +21,8 @@ define('COOKIE_FILE_PATH', ROOT_PATH . '/tmp/unifi_cookie');
 //UniFi 微信和验证码授权上网配置信息
 define('CONFIG_PATH', ROOT_PATH . '/config');
 
-include_once (DEPS_PATH . '/VerifyCode.php');
-include_once (DEPS_PATH . '/unifi.php');
-include_once (DEPS_PATH . '/get_site.php');
-
-include_once (DEPS_PATH . '/mysql.php');
-$config = array(
-    'host' => DB_HOST,
-    'user' => DB_USERNAME,
-    'pass' => DB_PASSWORD,
-    'name' => DB_DBNAME,
-    'port' => DB_PORT,
-);
-$mysql = new UbntMysql($config);
-
-define('PHP_EXT', '.php');
+include_once (DEPS_PATH . '/VerifyCode' . PHP_EXT);
+include_once (DEPS_PATH . '/unifi' . PHP_EXT);
+include_once (DEPS_PATH . '/get_site' . PHP_EXT);
+include_once (DEPS_PATH . '/mysql' . PHP_EXT);
 //-----------------------------------系统配置（不要修改）-----------------------------------------

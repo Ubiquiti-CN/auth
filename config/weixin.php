@@ -31,3 +31,12 @@ define('DB_PORT', '3306');
 define('WEIXIN_TABLE', '');//微信表名
 define('VERIFY_CODE_TABLE', '');//验证码表名
 //-----------------------------------MySQL----------------------------------------------------
+
+$config = array(
+    'host' => DB_HOST,
+    'user' => DB_USERNAME,
+    'pass' => DB_PASSWORD,
+    'name' => DB_DBNAME,
+    'port' => DB_PORT,
+);
+$mysql = new UbntMysql($config);
