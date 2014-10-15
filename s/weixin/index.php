@@ -1,6 +1,8 @@
 <?php
 
 include_once ('../../config.php');
+echo __DIR__;exit;
+
 
 $array_tmp = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
 $site = end($array_tmp);
