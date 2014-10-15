@@ -2,7 +2,7 @@
 
 include_once ('../../config.php');
 
-$site = get_site();
+$site = get_site(__DIR__);
 echo $site;exit;
 
 include_once (CONFIG_PATH . '/' . $site . PHP_EXT);
