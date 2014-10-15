@@ -1,12 +1,5 @@
 <?php
 
-//-----------------------------------UniFi----------------------------------------------------
-/* UniFi 配置 */
-define('UNIFI_SERVER', '');
-define('UNIFI_USER', '');
-define('UNIFI_PASSWORD', '');
-//-----------------------------------UniFi----------------------------------------------------
-
 //-----------------------------------系统配置（不要修改）-----------------------------------------
 define('PHP_EXT', '.php');
 define('ROOT_PATH', dirname(__FILE__));
@@ -20,6 +13,7 @@ define('COOKIE_FILE_PATH', ROOT_PATH . '/tmp/unifi_cookie');
 
 //UniFi 微信和验证码授权上网配置信息
 define('CONFIG_PATH', ROOT_PATH . '/config');
+include_once (CONFIG_PATH . '/_global' . PHP_EXT);
 
 include_once (DEPS_PATH . '/VerifyCode' . PHP_EXT);
 include_once (DEPS_PATH . '/unifi' . PHP_EXT);
