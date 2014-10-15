@@ -4,6 +4,8 @@ session_start();
 
 header('Content-Type: text/html; charset=UTF-8');
 include_once('../../config.php');
+$site = get_site(__DIR__);
+include_once (CONFIG_PATH . '/' . $site . PHP_EXT);
 include_once(WEIBO_PATH . '/saetv2.ex.class.php');
 
 $o = new SaeTOAuthV2( WEIBO_AKEY , WEIBO_SKEY );
