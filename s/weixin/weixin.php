@@ -8,6 +8,11 @@ include_once (WEIXIN_PATH . '/class/wechat.class.php');
 $options = array(
     'token' => WECHAT_TOKEN,
 );
+$options = array(
+    'token'=>'9Ixxxxxxx',	//填写应用接口的Token
+    'encodingaeskey'=>'d4o9WVg8sxxxxxxxxxxxxxxxxxxxxxx',//填写加密用的EncodingAESKey
+    'appid'=>'wxa07979baxxxxxxxx',	//填写高级调用功能的appid
+);
 $weObj = new Wechat($options);
 $weObj->valid();
 

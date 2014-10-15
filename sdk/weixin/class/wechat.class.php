@@ -7,6 +7,7 @@
  *  usage:
  *   $options = array(
  *			'token'=>'tokenaccesskey', //填写你设定的key
+ *			'encodingaeskey'=>'encodingaeskey', //填写加密用的EncodingAESKey
  *			'appid'=>'wxdk1234567890', //填写高级调用功能的app id
  *			'appsecret'=>'xxxxxxxxxxxxxxxxxxx', //填写高级调用功能的密钥
  *			'partnerid'=>'88888888', //财付通商户身份标识
@@ -93,8 +94,11 @@ class Wechat
 	const CUSTOM_SERVICE_GET_RECORD = '/customservice/getrecord?';
 	const CUSTOM_SERVICE_GET_KFLIST = '/customservice/getkflist?';
 	const CUSTOM_SERVICE_GET_ONLINEKFLIST = '/customservice/getkflist?';
+	const SEMANTIC_API_URL= 'https://api.weixin.qq.com/semantic/semproxy/search?';
 	
 	private $token;
+	private $encodingAesKey;
+	private $encrypt_type;
 	private $appid;
 	private $appsecret;
 	private $access_token;
@@ -102,6 +106,7 @@ class Wechat
 	private $partnerid;
 	private $partnerkey;
 	private $paysignkey;
+	private $postxml;
 	private $_msg;
 	private $_funcflag = false;
 	private $_receive;
@@ -114,6 +119,7 @@ class Wechat
 	public function __construct($options)
 	{
 		$this->token = isset($options['token'])?$options['token']:'';
+		$this->encodingAesKey = isset($options['encodingaeskey'])?$options['encodingaeskey']:'';
 		$this->appid = isset($options['appid'])?$options['appid']:'';
 		$this->appsecret = isset($options['appsecret'])?$options['appsecret']:'';
 		$this->partnerid = isset($options['partnerid'])?$options['partnerid']:'';
@@ -126,14 +132,15 @@ class Wechat
 	/**
 	 * For weixin server validation 
 	 */	
-	private function checkSignature()
+	private function checkSignature($str='')
 	{
         $signature = isset($_GET["signature"])?$_GET["signature"]:'';
+	    $signature = isset($_GET["msg_signature"])?$_GET["msg_signature"]:$signature; //如果存在加密验证则用加密验证段
         $timestamp = isset($_GET["timestamp"])?$_GET["timestamp"]:'';
         $nonce = isset($_GET["nonce"])?$_GET["nonce"]:'';
         		
 		$token = $this->token;
-		$tmpArr = array($token, $timestamp, $nonce);
+		$tmpArr = array($token, $timestamp, $nonce,$str);
 		sort($tmpArr, SORT_STRING);
 		$tmpStr = implode( $tmpArr );
 		$tmpStr = sha1( $tmpStr );
@@ -151,23 +158,46 @@ class Wechat
 	 */
 	public function valid($return=false)
     {
-        $echoStr = isset($_GET["echostr"]) ? $_GET["echostr"]: '';
+        $encryptStr="";
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $postStr = file_get_contents("php://input");
+            $array = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $this->encrypt_type = isset($_GET["encrypt_type"]) ? $_GET["encrypt_type"]: '';
+            if ($this->encrypt_type == 'aes') { //aes加密
+                $this->log($postStr);
+            	$encryptStr = $array['Encrypt'];
+            	$pc = new Prpcrypt($this->encodingAesKey);
+            	$array = $pc->decrypt($encryptStr,$this->appid);
+            	if (!isset($array[0]) || ($array[0] != 0)) {
+            	    if (!$return) {
+            	        die('解密失败！');
+            	    } else {
+            	        return false;
+            	    }
+            	}
+            	$this->postxml = $array[1];
+            } else {
+                $this->postxml = $postStr;
+            }
+        } else {
+            $echoStr = isset($_GET["echostr"]) ? $_GET["echostr"]: '';
+        }
         if ($return) {
         		if ($echoStr) {
-        			if ($this->checkSignature()) 
+        			if ($this->checkSignature($encryptStr)) 
         				return $echoStr;
         			else
         				return false;
         		} else 
-        			return $this->checkSignature();
+        			return $this->checkSignature($encryptStr);
         } else {
 	        	if ($echoStr) {
-	        		if ($this->checkSignature())
+	        		if ($this->checkSignature($encryptStr))
 	        			die($echoStr);
 	        		else 
 	        			die('no access');
 	        	}  else {
-	        		if ($this->checkSignature())
+	        		if ($this->checkSignature($encryptStr))
 	        			return true;
 	        		else
 	        			die('no access');
@@ -213,7 +243,8 @@ class Wechat
 	public function getRev()
 	{
 		if ($this->_receive) return $this;
-		$postStr = file_get_contents("php://input");
+		$postStr = !empty($this->postxml)?$this->postxml:file_get_contents("php://input");
+		//兼顾使用明文又不想调用valid()方法的情况
 		$this->log($postStr);
 		if (!empty($postStr)) {
 			$this->_receive = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -296,7 +327,10 @@ class Wechat
 	 */
 	public function getRevPic(){
 		if (isset($this->_receive['PicUrl']))
-			return $this->_receive['PicUrl'];
+			return array(
+				'mediaid'=>$this->_receive['MediaId'],
+				'picurl'=>(string)$this->_receive['PicUrl'],    //防止picurl为空导致解析出错
+			);
 		else 
 			return false;
 	}
@@ -354,12 +388,122 @@ class Wechat
 		if (isset($this->_receive['EventKey'])){
 			$array['key'] = $this->_receive['EventKey'];
 		}
-		
 		if (isset($array) && count($array) > 0) {
 			return $array;
 		} else {
 			return false;
-		} 
+		}
+	}
+	
+	/**
+	 * 获取自定义菜单的扫码推事件信息
+	 * 
+	 * 事件类型为以下两种时则调用此方法有效
+	 * Event	 事件类型，scancode_push
+	 * Event	 事件类型，scancode_waitmsg
+	 * 
+	 * @return: array | false
+	 * array (
+	 *     'ScanType'=>'qrcode',
+	 *     'ScanResult'=>'123123'
+	 * )
+	 */
+	public function getRevScanInfo(){
+		if (isset($this->_receive['ScanCodeInfo'])){
+		    if (!is_array($this->_receive['SendPicsInfo'])) {
+		        $array=(array)$this->_receive['ScanCodeInfo'];
+		        $this->_receive['ScanCodeInfo']=$array;
+		    }else {
+		        $array=$this->_receive['ScanCodeInfo'];
+		    }
+		}
+		if (isset($array) && count($array) > 0) {
+			return $array;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 获取自定义菜单的图片发送事件信息
+	 * 
+	 * 事件类型为以下三种时则调用此方法有效
+	 * Event	 事件类型，pic_sysphoto        弹出系统拍照发图的事件推送
+	 * Event	 事件类型，pic_photo_or_album  弹出拍照或者相册发图的事件推送
+	 * Event	 事件类型，pic_weixin          弹出微信相册发图器的事件推送
+	 * 
+	 * @return: array | false
+	 * array (
+	 *   'Count' => '2',
+	 *   'PicList' =>array (
+	 *         'item' =>array (
+	 *             0 =>array ('PicMd5Sum' => 'aaae42617cf2a14342d96005af53624c'),
+	 *             1 =>array ('PicMd5Sum' => '149bd39e296860a2adc2f1bb81616ff8'),
+	 *         ),
+	 *   ),
+	 * )
+	 * 
+	 */
+	public function getRevSendPicsInfo(){
+		if (isset($this->_receive['SendPicsInfo'])){
+		    if (!is_array($this->_receive['SendPicsInfo'])) {
+		        $array=(array)$this->_receive['SendPicsInfo'];
+		        if (isset($array['PicList'])){
+		            $array['PicList']=(array)$array['PicList'];
+		            $item=$array['PicList']['item'];
+		            $array['PicList']['item']=array();
+		            foreach ( $item as $key => $value ){
+		                $array['PicList']['item'][$key]=(array)$value;
+		            }
+		        }
+		        $this->_receive['SendPicsInfo']=$array;
+		    } else {
+		        $array=$this->_receive['SendPicsInfo'];
+		    }
+		}
+		if (isset($array) && count($array) > 0) {
+			return $array;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 获取自定义菜单的地理位置选择器事件推送
+	 *
+	 * 事件类型为以下时则可以调用此方法有效
+	 * Event	 事件类型，location_select        弹出系统拍照发图的事件推送
+	 *
+	 * @return: array | false
+	 * array (
+	 *   'Location_X' => '33.731655000061',
+	 *   'Location_Y' => '113.29955200008047',
+	 *   'Scale' => '16',
+	 *   'Label' => '某某市某某区某某路',
+	 *   'Poiname' => '',
+	 * )
+	 * 
+	 */
+	public function getRevSendGeoInfo(){
+	    if (isset($this->_receive['SendLocationInfo'])){
+	        if (!is_array($this->_receive['SendLocationInfo'])) {
+	            $array=(array)$this->_receive['SendLocationInfo'];
+	            if (empty($array['Poiname'])) {
+	                $array['Poiname']="";
+	            }
+	            if (empty($array['Label'])) {
+	                $array['Label']="";
+	            }
+	            $this->_receive['SendLocationInfo']=$array;
+	        } else {
+	            $array=$this->_receive['SendLocationInfo'];
+	        }
+	    }
+	    if (isset($array) && count($array) > 0) {
+	        return $array;
+	    } else {
+	        return false;
+	    }
 	}
 	
 	/**
@@ -507,6 +651,69 @@ class Wechat
 		$this->Message($msg);
 		return $this;
 	}
+	/**
+	 * 设置回复消息
+	 * Examle: $obj->image('media_id')->reply();
+	 * @param string $mediaid
+	 */
+	public function image($mediaid='')
+	{
+		$FuncFlag = $this->_funcflag ? 1 : 0;
+		$msg = array(
+			'ToUserName' => $this->getRevFrom(),
+			'FromUserName'=>$this->getRevTo(),
+			'MsgType'=>self::MSGTYPE_IMAGE,
+			'Image'=>array('MediaId'=>$mediaid),
+			'CreateTime'=>time(),
+			'FuncFlag'=>$FuncFlag
+		);
+		$this->Message($msg);
+		return $this;
+	}
+	
+	/**
+	 * 设置回复消息
+	 * Examle: $obj->voice('media_id')->reply();
+	 * @param string $mediaid
+	 */
+	public function voice($mediaid='')
+	{
+		$FuncFlag = $this->_funcflag ? 1 : 0;
+		$msg = array(
+			'ToUserName' => $this->getRevFrom(),
+			'FromUserName'=>$this->getRevTo(),
+			'MsgType'=>self::MSGTYPE_IMAGE,
+			'Voice'=>array('MediaId'=>$mediaid),
+			'CreateTime'=>time(),
+			'FuncFlag'=>$FuncFlag
+		);
+		$this->Message($msg);
+		return $this;
+	}
+	
+	/**
+	 * 设置回复消息
+	 * Examle: $obj->video('media_id','title','description')->reply();
+	 * @param string $mediaid
+	 */
+	public function video($mediaid='',$title,$description)
+	{
+		$FuncFlag = $this->_funcflag ? 1 : 0;
+		$msg = array(
+			'ToUserName' => $this->getRevFrom(),
+			'FromUserName'=>$this->getRevTo(),
+			'MsgType'=>self::MSGTYPE_IMAGE,
+			'Video'=>array(
+			        'MediaId'=>$mediaid,
+			        'Title'=>$mediaid,
+			        'Description'=>$mediaid,
+			),
+			'CreateTime'=>time(),
+			'FuncFlag'=>$FuncFlag
+		);
+		$this->Message($msg);
+		return $this;
+	}
 	
 	/**
 	 * 设置回复音乐
@@ -579,10 +786,43 @@ class Wechat
 			$msg = $this->_msg;
 		$xmldata=  $this->xml_encode($msg);
 		$this->log($xmldata);
+		if ($this->encrypt_type == 'aes') { //如果来源消息为加密方式
+		    $pc = new Prpcrypt($this->encodingAesKey);
+		    $array = $pc->encrypt($xmldata, $this->appid);
+		    $ret = $array[0];
+		    if ($ret != 0) {
+		        $this->log('encrypt err!');
+		        return false;
+		    }
+		    $timestamp = time();
+		    $nonce = rand(77,999)*rand(605,888)*rand(11,99);
+		    $encrypt = $array[1];
+		    $tmpArr = array($this->token, $timestamp, $nonce,$encrypt);//比普通公众平台多了一个加密的密文
+		    sort($tmpArr, SORT_STRING);
+		    $signature = implode($tmpArr);
+		    $signature = sha1($signature);
+		    $xmldata = $this->generate($encrypt, $signature, $timestamp, $nonce);
+		    $this->log($xmldata);
+		}
 		if ($return)
 			return $xmldata;
 		else
 			echo $xmldata;
+	}
+
+    /**
+     * xml格式加密，仅请求为加密方式时再用
+     */
+	private function generate($encrypt, $signature, $timestamp, $nonce)
+	{
+	    //格式化加密信息
+	    $format = "<xml>
+<Encrypt><![CDATA[%s]]></Encrypt>
+<MsgSignature><![CDATA[%s]]></MsgSignature>
+<TimeStamp>%s</TimeStamp>
+<Nonce><![CDATA[%s]]></Nonce>
+</xml>";
+	    return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
 	}
 	
 	/**
@@ -611,15 +851,16 @@ class Wechat
 	 * POST 请求
 	 * @param string $url
 	 * @param array $param
+	 * @param boolean $post_file 是否文件上传
 	 * @return string content
 	 */
-	private function http_post($url,$param){
+	private function http_post($url,$param,$post_file=false){
 		$oCurl = curl_init();
 		if(stripos($url,"https://")!==FALSE){
 			curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
 			curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
 		}
-		if (is_string($param)) {
+		if (is_string($param) || $post_file) {
 			$strPOST = $param;
 		} else {
 			$aPOST = array();
@@ -646,11 +887,16 @@ class Wechat
 	 * 通用auth验证方法，暂时仅用于菜单更新操作
 	 * @param string $appid
 	 * @param string $appsecret
+	 * @param string $token 手动指定access_token，非必要情况不建议用
 	 */
-	public function checkAuth($appid='',$appsecret=''){
+	public function checkAuth($appid='',$appsecret='',$token=''){
 		if (!$appid || !$appsecret) {
 			$appid = $this->appid;
 			$appsecret = $this->appsecret;
+		}
+		if ($token) { //手动指定token，优先使用
+		    $this->access_token=$token;
+		    return $this->access_token;
 		}
 		//TODO: get the cache access_token
 		$result = $this->http_get(self::API_URL_PREFIX.self::AUTH_URL.'appid='.$appid.'&secret='.$appsecret);
@@ -733,33 +979,54 @@ class Wechat
 	 * 创建菜单
 	 * @param array $data 菜单数组数据
 	 * example:
-		  {
-		     "button":[
-		     {	
-		          "type":"click",
-		          "name":"今日歌曲",
-		          "key":"MENU_KEY_MUSIC"
-		      },
-		      {
-		           "type":"view",
-		           "name":"歌手简介",
-		           "url":"http://www.qq.com/"
-		      },
-		      {
-		           "name":"菜单",
-		           "sub_button":[
-		            {
-		               "type":"click",
-		               "name":"hello word",
-		               "key":"MENU_KEY_MENU"
-		            },
-		            {
-		               "type":"click",
-		               "name":"赞一下我们",
-		               "key":"MENU_KEY_GOOD"
-		            }]
-		       }]
-		 }
+     * 	array (
+     * 	    'button' => array (
+     * 	      0 => array (
+     * 	        'name' => '扫码',
+     * 	        'sub_button' => array (
+     * 	            0 => array (
+     * 	              'type' => 'scancode_waitmsg',
+     * 	              'name' => '扫码带提示',
+     * 	              'key' => 'rselfmenu_0_0',
+     * 	            ),
+     * 	            1 => array (
+     * 	              'type' => 'scancode_push',
+     * 	              'name' => '扫码推事件',
+     * 	              'key' => 'rselfmenu_0_1',
+     * 	            ),
+     * 	        ),
+     * 	      ),
+     * 	      1 => array (
+     * 	        'name' => '发图',
+     * 	        'sub_button' => array (
+     * 	            0 => array (
+     * 	              'type' => 'pic_sysphoto',
+     * 	              'name' => '系统拍照发图',
+     * 	              'key' => 'rselfmenu_1_0',
+     * 	            ),
+     * 	            1 => array (
+     * 	              'type' => 'pic_photo_or_album',
+     * 	              'name' => '拍照或者相册发图',
+     * 	              'key' => 'rselfmenu_1_1',
+     * 	            )
+     * 	        ),
+     * 	      ),
+     * 	      2 => array (
+     * 	        'type' => 'location_select',
+     * 	        'name' => '发送位置',
+     * 	        'key' => 'rselfmenu_2_0'
+     * 	      ),
+     * 	    ),
+     * 	)
+     * type可以选择为以下几种，其中5-8除了收到菜单事件以外，还会单独收到对应类型的信息。
+     * 1、click：点击推事件
+     * 2、view：跳转URL
+     * 3、scancode_push：扫码推事件
+     * 4、scancode_waitmsg：扫码推事件且弹出“消息接收中”提示框
+     * 5、pic_sysphoto：弹出系统拍照发图
+     * 6、pic_photo_or_album：弹出拍照或者相册发图
+     * 7、pic_weixin：弹出微信相册发图器
+     * 8、location_select：弹出地理位置选择器
 	 */
 	public function createMenu($data){
 		if (!$this->access_token && !$this->checkAuth()) return false;
@@ -826,7 +1093,7 @@ class Wechat
 	 */
 	public function uploadMedia($data, $type){
 		if (!$this->access_token && !$this->checkAuth()) return false;
-		$result = $this->http_post(self::UPLOAD_MEDIA_URL.self::MEDIA_UPLOAD.'access_token='.$this->access_token.'&type='.$type,$data);
+		$result = $this->http_post(self::UPLOAD_MEDIA_URL.self::MEDIA_UPLOAD.'access_token='.$this->access_token.'&type='.$type,$data,true);
 		if ($result)
 		{
 			$json = json_decode($result,true);
@@ -856,7 +1123,7 @@ class Wechat
 				$this->errMsg = $json['errmsg'];
 				return false;
 			}
-			return $json;
+			return $result;
 		}
 		return false;
 	}
@@ -1033,7 +1300,8 @@ class Wechat
 	/**
 	 * 获取关注者详细信息
 	 * @param string $openid
-	 * @return array
+	 * @return array {subscribe,openid,nickname,sex,city,province,country,language,headimgurl,subscribe_time,[unionid]}
+	 * 注意：unionid字段 只有在用户将公众号绑定到微信开放平台账号后，才会出现。建议调用前用isset()检测一下
 	 */
 	public function getUserInfo($openid){
 		if (!$this->access_token && !$this->checkAuth()) return false;
@@ -1273,7 +1541,8 @@ class Wechat
 	 * 获取授权后的用户资料
 	 * @param string $access_token
 	 * @param string $openid
-	 * @return array {openid,nickname,sex,province,city,country,headimgurl,privilege}
+	 * @return array {openid,nickname,sex,province,city,country,headimgurl,privilege,[unionid]}
+	 * 注意：unionid字段 只有在用户将公众号绑定到微信开放平台账号后，才会出现。建议调用前用isset()检测一下
 	 */
 	public function getOauthUserinfo($access_token,$openid){
 		$result = $this->http_get(self::OAUTH_USERINFO_URL.'access_token='.$access_token.'&openid='.$openid);
@@ -1347,6 +1616,32 @@ class Wechat
 		}
 		return $str;
 	}
+	
+	/**
+	 * 生成原生支付url
+	 * @param number $productid 商品编号，最长为32字节
+	 * @return string
+	 */
+	public function createNativeUrl($productid){
+		    $nativeObj["appid"] = $this->appid;
+		    $nativeObj["appkey"] = $this->paysignkey;
+		    $nativeObj["productid"] = urlencode($productid);
+		    $nativeObj["timestamp"] = time();
+		    $nativeObj["noncestr"] = $this->generateNonceStr();
+		    $nativeObj["sign"] = $this->getSignature($nativeObj);
+		    unset($nativeObj["appkey"]);
+		    $bizString = "";
+		    foreach($nativeObj as $key => $value)
+		    {
+			if(strlen($bizString) == 0)
+				$bizString .= $key . "=" . $value;
+			else
+				$bizString .= "&" . $key . "=" . $value;
+		    }
+		    return "weixin://wxpay/bizpayurl?".$bizString;
+		    //weixin://wxpay/bizpayurl?sign=XXXXX&appid=XXXXXX&productid=XXXXXX&timestamp=XXXXXX&noncestr=XXXXXX
+	}
+
 	
 	/**
 	 * 生成订单package字符串
@@ -1548,7 +1843,6 @@ class Wechat
 	public function sendTemplateMessage($data){
 		if (!$this->access_token && !$this->checkAuth()) return false;
 		$result = $this->http_post(self::API_URL_PREFIX.self::TEMPLATE_SEND_URL.'access_token='.$this->access_token,self::json_encode($data));
-		
 		if($result){
 			$json = json_decode($result,true);
 			if (!$json || !empty($json['errcode'])) {
@@ -1653,4 +1947,250 @@ class Wechat
 		}
 		return false;
 	}
+	
+	/**
+	 * 语义理解接口
+	 * @param String $uid      用户唯一id（非开发者id），用户区分公众号下的不同用户（建议填入用户openid）
+	 * @param String $query    输入文本串
+	 * @param String $category 需要使用的服务类型，多个用“，”隔开，不能为空
+	 * @param Float $latitude  纬度坐标，与经度同时传入；与城市二选一传入
+	 * @param Float $longitude 经度坐标，与纬度同时传入；与城市二选一传入
+	 * @param String $city     城市名称，与经纬度二选一传入
+	 * @param String $region   区域名称，在城市存在的情况下可省略；与经纬度二选一传入
+	 * @return boolean|array
+	 */
+	public function querySemantic($uid,$query,$category,$latitude=0,$longitude=0,$city="",$region=""){
+	    if (!$this->access_token && !$this->checkAuth()) return false;
+	    $data=array(
+	            'query' => $query,
+	            'category' => $category,
+	            'appid' => $this->appid,
+	            'uid' => ''
+	    );
+	    //地理坐标或城市名称二选一
+	    if ($latitude) {
+	        $data['latitude'] = $latitude;
+	        $data['longitude'] = $longitude;
+	    } elseif ($city) {
+	        $data['city'] = $city;
+	    } elseif ($region) {
+	        $data['region'] = $region;
+	    }
+	    $result = $this->http_post(self::SEMANTIC_API_URL.'access_token='.$this->access_token,self::json_encode($data));
+	    if ($result)
+	    {
+	        $json = json_decode($result,true);
+	        if (!$json || !empty($json['errcode'])) {
+	            $this->errCode = $json['errcode'];
+	            $this->errMsg = $json['errmsg'];
+	            return false;
+	        }
+	        return $json;
+	    }
+	    return false;
+	}
+}
+
+
+
+/**
+ * PKCS7Encoder class
+ *
+ * 提供基于PKCS7算法的加解密接口.
+ */
+class PKCS7Encoder
+{
+    public static $block_size = 32;
+
+    /**
+     * 对需要加密的明文进行填充补位
+     * @param $text 需要进行填充补位操作的明文
+     * @return 补齐明文字符串
+     */
+    function encode($text)
+    {
+        $block_size = PKCS7Encoder::$block_size;
+        $text_length = strlen($text);
+        //计算需要填充的位数
+        $amount_to_pad = PKCS7Encoder::$block_size - ($text_length % PKCS7Encoder::$block_size);
+        if ($amount_to_pad == 0) {
+            $amount_to_pad = PKCS7Encoder::block_size;
+        }
+        //获得补位所用的字符
+        $pad_chr = chr($amount_to_pad);
+        $tmp = "";
+        for ($index = 0; $index < $amount_to_pad; $index++) {
+            $tmp .= $pad_chr;
+        }
+        return $text . $tmp;
+    }
+
+    /**
+     * 对解密后的明文进行补位删除
+     * @param decrypted 解密后的明文
+     * @return 删除填充补位后的明文
+     */
+    function decode($text)
+    {
+
+        $pad = ord(substr($text, -1));
+        if ($pad < 1 || $pad > PKCS7Encoder::$block_size) {
+            $pad = 0;
+        }
+        return substr($text, 0, (strlen($text) - $pad));
+    }
+
+}
+
+/**
+ * Prpcrypt class
+ *
+ * 提供接收和推送给公众平台消息的加解密接口.
+ */
+class Prpcrypt
+{
+    public $key;
+
+    function Prpcrypt($k)
+    {
+        $this->key = base64_decode($k . "=");
+    }
+
+    /**
+     * 对明文进行加密
+     * @param string $text 需要加密的明文
+     * @return string 加密后的密文
+     */
+    public function encrypt($text, $appid)
+    {
+
+        try {
+            //获得16位随机字符串，填充到明文之前
+            $random = "aaaabbbbccccdddd"; //$this->getRandomStr();
+            $text = $random . pack("N", strlen($text)) . $text . $appid;
+            // 网络字节序
+            $size = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+            $module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
+            $iv = substr($this->key, 0, 16);
+            //使用自定义的填充方式对明文进行补位填充
+            $pkc_encoder = new PKCS7Encoder;
+            $text = $pkc_encoder->encode($text);
+            mcrypt_generic_init($module, $this->key, $iv);
+            //加密
+            $encrypted = mcrypt_generic($module, $text);
+            mcrypt_generic_deinit($module);
+            mcrypt_module_close($module);
+
+            //			print(base64_encode($encrypted));
+            //使用BASE64对加密后的字符串进行编码
+            return array(ErrorCode::$OK, base64_encode($encrypted));
+        } catch (Exception $e) {
+            print $e;
+            return array(ErrorCode::$EncryptAESError, null);
+        }
+    }
+
+    /**
+     * 对密文进行解密
+     * @param string $encrypted 需要解密的密文
+     * @return string 解密得到的明文
+     */
+    public function decrypt($encrypted, $appid)
+    {
+
+        try {
+            //使用BASE64对需要解密的字符串进行解码
+            $ciphertext_dec = base64_decode($encrypted);
+            $module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
+            $iv = substr($this->key, 0, 16);
+            mcrypt_generic_init($module, $this->key, $iv);
+            //解密
+            $decrypted = mdecrypt_generic($module, $ciphertext_dec);
+            mcrypt_generic_deinit($module);
+            mcrypt_module_close($module);
+        } catch (Exception $e) {
+            return array(ErrorCode::$DecryptAESError, null);
+        }
+
+
+        try {
+            //去除补位字符
+            $pkc_encoder = new PKCS7Encoder;
+            $result = $pkc_encoder->decode($decrypted);
+            //去除16位随机字符串,网络字节序和AppId
+            if (strlen($result) < 16)
+                return "";
+            $content = substr($result, 16, strlen($result));
+            $len_list = unpack("N", substr($content, 0, 4));
+            $xml_len = $len_list[1];
+            $xml_content = substr($content, 4, $xml_len);
+            $from_appid = substr($content, $xml_len + 4);
+        } catch (Exception $e) {
+            print $e;
+            return array(ErrorCode::$IllegalBuffer, null);
+        }
+        if ($from_appid != $appid)
+            return array(ErrorCode::$ValidateAppidError, null);
+        return array(0, $xml_content);
+
+    }
+
+
+    /**
+     * 随机生成16位字符串
+     * @return string 生成的字符串
+     */
+    function getRandomStr()
+    {
+
+        $str = "";
+        $str_pol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+        $max = strlen($str_pol) - 1;
+        for ($i = 0; $i < 16; $i++) {
+            $str .= $str_pol[mt_rand(0, $max)];
+        }
+        return $str;
+    }
+
+}
+
+/**
+ * error code
+ * 仅用作类内部使用，不用于官方API接口的errCode码
+ */
+class ErrorCode
+{
+    public static $OK = 0;
+    public static $ValidateSignatureError = 40001;
+    public static $ParseXmlError = 40002;
+    public static $ComputeSignatureError = 40003;
+    public static $IllegalAesKey = 40004;
+    public static $ValidateAppidError = 40005;
+    public static $EncryptAESError = 40006;
+    public static $DecryptAESError = 40007;
+    public static $IllegalBuffer = 40008;
+    public static $EncodeBase64Error = 40009;
+    public static $DecodeBase64Error = 40010;
+    public static $GenReturnXmlError = 40011;
+    public static $errCode=array(
+            '0' => '处理成功',
+            '40001' => '校验签名失败',
+            '40002' => '解析xml失败',
+            '40003' => '计算签名失败',
+            '40004' => '不合法的AESKey',
+            '40005' => '校验AppID失败',
+            '40006' => 'AES加密失败',
+            '40007' => 'AES解密失败',
+            '40008' => '公众平台发送的xml不合法',
+            '40009' => 'Base64编码失败',
+            '40010' => 'Base64解码失败',
+            '40011' => '公众帐号生成回包xml失败'
+    );
+    public static function getErrText($err) {
+        if (isset(self::$errCode[$err])) {
+            return self::$errCode[$err];
+        }else {
+            return false;
+        };
+    }
 }

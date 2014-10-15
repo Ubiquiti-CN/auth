@@ -15,6 +15,8 @@ define('DEFAULT_URL', 'http://www.ubnt.com.cn');
 /* 微信 开发者中心->服务器配置 Token值 */
 define('WECHAT_TOKEN', '');
 
+define('WECHAT_ENCODING_AES_Key', '');
+
 /* 微信消息和欢迎内容 */
 define('WEIXIN_AUTH_MESSAGE', '');//当用户发送此内容才能获取返回
 define('WEIXIN_ADD_WELCOME_MESSAGE', '');//关注后的欢迎内容
