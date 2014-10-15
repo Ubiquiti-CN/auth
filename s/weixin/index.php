@@ -14,7 +14,8 @@ if (!$Mac_ID) {
     exit();
 }
 
-$sql = "select * from " . WEIXIN_TABLE . " where `Mac_ID` = '{$Mac_ID}'";
+$sql = "select * from " . WEIXIN_TABLE . "
+        where `Mac_ID` = '{$Mac_ID}'";
 $res = $mysql->query($sql, 'all');
 
 if (!is_array($res) || count($res) <= 0) {

@@ -14,7 +14,7 @@ define('DEFAULT_URL', 'http://www.ubnt.com.cn');
 //-----------------------------------MySQL----------------------------------------------------
 /* 配置mysql */
 define('DB_HOST', 'localhost');
-define('DB_USERNAME', 'root');
+define('DB_USERNAME', '');
 define('DB_PASSWORD', '');//数据库密码
 define('DB_DBNAME', '');//数据库库名
 define('DB_PORT', '3306');

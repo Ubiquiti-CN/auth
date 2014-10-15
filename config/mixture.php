@@ -11,6 +11,21 @@ define('WIFI_EXPIRED_TIME', 60);//分钟
 /* 默认跳转页面 */
 define('DEFAULT_URL', 'http://www.ubnt.com.cn');
 
+/* 组合方式 */
+define('WEIBO_ENABLE', false);
+define('WEIXIN_ENABLE', false);
+define('VERIFY_CODE_ENABLE', false);
+
+//-----------------------------------微博------------------------------------------------------
+define('WEIBO_AKEY', '');
+define('WEIBO_SKEY', '');
+define('WEIBO_CALLBACK_URL', '');
+define('WEIBO_NAME', '');
+define('WEIBO_MESSAGE', '');
+define('WEIBO_SEND_ERROR_MESSAGE', '');
+define('WEIBO_FOLLOW_ERROR_MESSAGE', '');
+//-----------------------------------微博------------------------------------------------------
+
 //-----------------------------------微信------------------------------------------------------
 /* 微信 开发者中心->服务器配置 Token值 */
 define('WECHAT_TOKEN', '');
