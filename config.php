@@ -24,4 +24,5 @@ include_once (DEPS_PATH . '/VerifyCode' . PHP_EXT);
 include_once (DEPS_PATH . '/unifi' . PHP_EXT);
 include_once (DEPS_PATH . '/get_site' . PHP_EXT);
 include_once (DEPS_PATH . '/mysql' . PHP_EXT);
+include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
 //-----------------------------------系统配置（不要修改）-----------------------------------------
