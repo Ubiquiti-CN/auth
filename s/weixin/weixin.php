@@ -34,7 +34,7 @@ switch($type) {
         break;
     case Wechat::MSGTYPE_EVENT:
         $revEvent = $weObj->getRev()->getRevEvent();
-        $event = $revEvent['event'];
+        $event = strtolower($revEvent['event']);
         if ($event == 'subscribe') {  //关注微信操作
             $weObj->text(WEIXIN_WELCOME_MESSAGE)->reply();
         } else if ($event == 'unsubscribe') {  //取消关注微信操作
@@ -52,7 +52,7 @@ switch($type) {
 
                 foreach ($res as $key => $value) {
                     UniFi::sendUnauthorization($value['Mac_ID']);
-                    sleep(5);
+                    sleep(2);
                 }
             }
         }
