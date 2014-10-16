@@ -131,7 +131,7 @@ class Browscap {
      *
      * @var bool
      */
-    protected $_cacheLoaded = BROWSCAP_CACHE_ENABLE;
+    protected $_cacheLoaded = BROWSCAP_CACHE_LOADED;
 
     /**
      * Where to store the value of the included PHP cache file

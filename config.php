@@ -14,7 +14,7 @@ define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
 /* Browscap cache和ini文件地址 */
 define('BROWSCAP_CACHE_FILE', TMP_PATH . '/cache.php');
 define('BROWSCAP_INI_FILE', DEPS_PATH . '/browscap.ini');
-define('BROWSCAP_CACHE_ENABLE', true);
+define('BROWSCAP_CACHE_LOADED', false);
 
 //UniFi 微信和验证码授权上网配置信息
 define('CONFIG_PATH', ROOT_PATH . '/config');
