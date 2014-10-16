@@ -6,10 +6,15 @@ define('ROOT_PATH', dirname(__FILE__));
 define('DEPS_PATH', ROOT_PATH . '/deps');
 define('SITES_PATH', ROOT_PATH . '/s');
 define('SDK_PATH', ROOT_PATH . '/sdk');
+define('TMP_PATH', ROOT_PATH . '/tmp');
 define('WEIXIN_PATH', SDK_PATH . '/weixin');
 define('WEIBO_PATH', SDK_PATH . '/weibo');
 /* cookie 存放路径 */
-define('COOKIE_FILE_PATH', ROOT_PATH . '/tmp/unifi_cookie');
+define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
+/* Browscap cache和ini文件地址 */
+define('BROWSCAP_CACHE_FILE', TMP_PATH . '/cache.php');
+define('BROWSCAP_INI_FILE', DEPS_PATH . '/browscap.ini');
+define('BROWSCAP_CACHE_ENABLE', true);
 
 //UniFi 微信和验证码授权上网配置信息
 define('CONFIG_PATH', ROOT_PATH . '/config');
