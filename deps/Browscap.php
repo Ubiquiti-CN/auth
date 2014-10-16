@@ -974,5 +974,3 @@ class Browscap {
         return $ua;
     }
 }
-
-class Exception extends BaseException {}
