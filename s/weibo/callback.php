@@ -8,10 +8,6 @@ $site = get_site(__DIR__);
 include_once (CONFIG_PATH . '/' . $site . PHP_EXT);
 include_once(WEIBO_PATH . '/saetv2.ex.class.php');
 
-$array_tmp = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
-$site = end($array_tmp);
-$site = is_string($site) ? $site : 'default';
-
 $Mac_ID = isset($_SESSION['Mac_ID']) ? addslashes($_SESSION['Mac_ID']) : '';
 if (!$Mac_ID) {
     header('Location: ' . DEFAULT_URL);

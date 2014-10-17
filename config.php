@@ -11,6 +11,7 @@ define('SDK_PATH', ROOT_PATH . '/sdk');
 define('TMP_PATH', ROOT_PATH . '/tmp');
 define('WEIXIN_PATH', SDK_PATH . '/weixin');
 define('WEIBO_PATH', SDK_PATH . '/weibo');
+define('QQ_PATH', SDK_PATH . '/qq');
 /* cookie 存放路径 */
 define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
 /* Browscap cache和ini文件地址 */
