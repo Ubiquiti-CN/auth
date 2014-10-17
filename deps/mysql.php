@@ -3,8 +3,9 @@
 class UbntMysql {
 
     private static $_mysql=null;
+    private static $_db=null;
     public static function get_instance($db_config) {
-        if (self::$_mysql instanceof mysqli) {
+        if (self::$_db instanceof UbntMysql) {
 
         } else {
             $db = new mysqli($db_config['host'], $db_config['user'],
@@ -22,8 +23,9 @@ class UbntMysql {
             if ($charset)
                 $db->set_charset($charset);
             self::$_mysql = $db;
+            self::$_db = new self();
         }
-        return self::$_mysql;
+        return self::$_db;
     }
 
     public static function query($query, $result_mode='default', $paramter='') {
