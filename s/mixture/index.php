@@ -46,7 +46,7 @@ switch($mode) {
 
         $sql = "select * from " . WEIXIN_TABLE . "
         where `Mac_ID` = '{$Mac_ID}'";
-        $res = $mysql->query($sql, 'all');
+        $res = $mysql::query($sql, 'all');
 
         if (!is_array($res) || count($res) <= 0) {
             if (!$fromUserName) {
@@ -55,7 +55,7 @@ switch($mode) {
             }
             $sql = "insert into " . WEIXIN_TABLE . " (`Mac_ID`, `fromUserName`)
             values ('{$Mac_ID}', '{$fromUserName}')";
-            $mysql->query($sql);
+            $mysql::query($sql);
         }
 
         UniFi::set_site($site);

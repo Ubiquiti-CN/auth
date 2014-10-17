@@ -10,7 +10,7 @@ $fromUserName = isset($_GET['fromUserName']) ? addslashes($_GET['fromUserName'])
 $sql = "select `Mac_ID` from " . WEIXIN_TABLE . "
         where `Mac_ID` = '{$Mac_ID}'
         and `ticket` != ''";
-$res = $mysql->query($sql, '1');
+$res = $mysql::query($sql, '1');
 
 if ($res) {
     include_once (DEPS_PATH . '/weixin_success.php');
@@ -24,7 +24,7 @@ if (!$Mac_ID) {
 $sql = "select * from " . WEIXIN_TABLE . "
         where `Mac_ID` = '{$Mac_ID}'
         and `ticket` = 'authorized'";
-$res = $mysql->query($sql, 'all');
+$res = $mysql::query($sql, 'all');
 
 if (!is_array($res) || count($res) <= 0) {
     if (!$fromUserName) {
@@ -38,11 +38,11 @@ if (!is_array($res) || count($res) <= 0) {
         $weObj = new Wechat($options);
 
         $sql = "select `Mac_ID`, `scene_id`, `created_at`, `updated_at`, `ticket` from " . WEIXIN_TABLE . " where `Mac_ID` = '{$Mac_ID}' and `ticket` != 'authorized' limit 1";
-        $result = $mysql->query($sql, 'all');
+        $result = $mysql::query($sql, 'all');
         $expire = 500;
         if (!is_array($result) || count($result) < 0) {
             $sql = "select `scene_id` from " . WEIXIN_TABLE . " order by id desc limit 1";
-            $scene_id = $mysql->query($sql, '1');
+            $scene_id = $mysql::query($sql, '1');
             $scene_id = $scene_id % 9999 + 1;
             $qrcode = $weObj->getQRCode($scene_id, $type = 0, $expire);
             $ticket = $qrcode['ticket'];
@@ -64,7 +64,7 @@ if (!is_array($res) || count($res) <= 0) {
         }
 
         $img = $weObj->getQRUrl($ticket);
-        $mysql->query($sql);
+        $mysql::query($sql);
         echo "<img src='{$img}'>";
         echo "<br>";
         echo "ps: expired after 30 min";
@@ -90,7 +90,7 @@ if (!is_array($res) || count($res) <= 0) {
     $sql = "update " . WEIXIN_TABLE . "
             set `fromUserName` = '{$fromUserName}'
             where `Mac_ID` = '{$Mac_ID}'";
-    $mysql->query($sql);
+    $mysql::query($sql);
 }
 
 UniFi::set_site($site);
@@ -99,7 +99,7 @@ UniFi::sendAuthorization($Mac_ID, WIFI_EXPIRED_TIME);
 $sql = "update " . WEIXIN_TABLE . "
         set `ticket` = 'authorized'
         where `fromUserName` = '{$fromUserName}'";
-$mysql->query($sql);
+$mysql::query($sql);
 
 sleep(5);
 header('Location: ' . DEFAULT_URL);

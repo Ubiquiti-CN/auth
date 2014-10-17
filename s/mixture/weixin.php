@@ -42,13 +42,13 @@ switch($type) {
             //取消上网权限
             $sql = "select * from " . WEIXIN_TABLE . "
                     WHERE `fromUserName` = '{$fromUserName}'";
-            $res = $mysql->query($sql, 'all');
+            $res = $mysql::query($sql, 'all');
 
             if (is_array($res) && count($res) > 0) {
                 //删除数据
                 $sql = "DELETE FROM " . WEIXIN_TABLE . "
                         WHERE `fromUserName` = '{$fromUserName}'";
-                $mysql->query($sql);
+                $mysql::query($sql);
 
                 foreach ($res as $key => $value) {
                     UniFi::sendUnauthorization($value['Mac_ID']);

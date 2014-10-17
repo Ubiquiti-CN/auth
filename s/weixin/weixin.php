@@ -42,13 +42,13 @@ switch($type) {
             //取消上网权限
             $sql = "select * from " . WEIXIN_TABLE . "
                     WHERE `fromUserName` = '{$fromUserName}'";
-            $res = $mysql->query($sql, 'all');
+            $res = $mysql::query($sql, 'all');
 
             if (is_array($res) && count($res) > 0) {
                 //删除数据
                 $sql = "DELETE FROM " . WEIXIN_TABLE . "
                         WHERE `fromUserName` = '{$fromUserName}'";
-                $mysql->query($sql);
+                $mysql::query($sql);
 
                 foreach ($res as $key => $value) {
                     UniFi::sendUnauthorization($value['Mac_ID']);
@@ -59,7 +59,7 @@ switch($type) {
             $ticket = $weObj->getRevTicket();
             $scene_id = $weObj->getRevSceneId();
             $sql = "select * from " . WEIXIN_TABLE . " WHERE `scene_id` = '{$scene_id}'";
-            $res = $mysql->query($sql, 'all');
+            $res = $mysql::query($sql, 'all');
             $Mac_ID = $res[0]['Mac_ID'];
             $site = $res[0]['site'];
             UniFi::set_site($site);
@@ -68,7 +68,7 @@ switch($type) {
                     set `fromUserName` = '{$fromUserName}',
                         `ticket` = 'authorized'
                     where `scene_id` = '{$scene_id}'";
-            $mysql->query($sql);
+            $mysql::query($sql);
             sleep(2);
             $weObj->text('Welcome to the Free WiFi')->reply();
         }
