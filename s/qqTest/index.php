@@ -2,6 +2,10 @@
 
 session_start();
 
+include_once('../../config.php');
+$site = get_site(__DIR__);
+include_once (CONFIG_PATH . '/' . $site . PHP_EXT);
+
 $Mac_ID = isset($_GET['id']) ? addslashes($_GET['id']) : '';
 
 if (!$Mac_ID) {
