@@ -1,75 +1,71 @@
 <?php
 
 class UbntMysql {
-    private $db;
-    private $result = '';
 
-    private $host;
-    private $username;
-    private $passwd;
-    private $dbname;
-    private $port;
-    private $charset;
+    private static $_mysql=null;
+    public static function get_instance($db_config) {
+        if (self::$_mysql instanceof mysqli) {
 
-    public function __construct($db_config) {
-        $this->host = $db_config['host'];
-        $this->username = $db_config['user'];
-        $this->passwd = $db_config['pass'];
-        $this->dbname = $db_config['name'];
-        $this->port = $db_config['port'];
-        $this->charset = isset($db_config['char']) ? $db_config['char'] : 'utf8';
+        } else {
+            $db = new mysqli($db_config['host'], $db_config['user'],
+                             $db_config['pass'], $db_config['name'],
+                             $db_config['port']);
+            if ($db->connect_error) {
+                $db = new mysqli($db_config['host'], $db_config['user'],
+                                 $db_config['pass'], $db_config['name'],
+                                 $db_config['port']);
+                if ($db->connect_error) {
+                    throw new Exception('数据库维护中，请稍后再试', $db->errno);
+                }
+            }
+            $charset = isset($db_config['char']) ? $db_config['char'] : 'utf8';
+            if ($charset)
+                $db->set_charset($charset);
+            self::$_mysql = $db;
+        }
+        return self::$_mysql;
     }
 
     public function query($query, $result_mode='default', $paramter='') {
-        $this->db = new mysqli($this->host, $this->username, $this->passwd, 
-        $this->dbname, $this->port);
-        if ($this->db->connect_error) {
-            $this->db = new mysqli($this->host, $this->username, $this->passwd, 
-            $this->dbname, $this->port);
-            if ($this->db->connect_error) {
-                throw new Exception('数据库维护中，请稍后再试', $this->db->errno);
-            }
-        }
-        $this->result = '';
-        if ($this->charset)
-            $this->db->set_charset($this->charset); 
-        $res = $this->db->query($query);
+        $res = self::$_mysql->query($query);
         if ($res === FALSE) {
-            throw new Exception('数据库维护中，请稍后再试', $this->db->errno);
+            throw new Exception('数据库维护中，请稍后再试', self::$_mysql->errno);
         }
+        $result = '';
         switch ($result_mode) {
-        case '1':
-            $this->result = $res->fetch_row();
-            if ($this->result)
-                $this->result = $this->result[0];
-            break;
-        case 'array':
-            $this->result = $res->fetch_array(MYSQLI_ASSOC);
-            break;
-        case 'row':
-            $this->result = $res->fetch_row();
-            break;
-        case 'all':
-            while ($row = $res->fetch_array(MYSQLI_ASSOC))
-                $this->result[] = $row;
-            break;
-        case 'param':
-            while ($row = $res->fetch_array(MYSQLI_ASSOC))
-                $this->result[] = $row[$paramter];
-            break;
-        case 'id':
-            $this->result = $this->db->insert_id;
-            break;
-        default:
-            $this->result = $res;
-            break;
+            case '1':
+                $result = $res->fetch_row();
+                if ($result)
+                    $result = $result[0];
+                break;
+            case 'array':
+                $result = $res->fetch_array(MYSQLI_ASSOC);
+                break;
+            case 'row':
+                $result = $res->fetch_row();
+                break;
+            case 'all':
+                while ($row = $res->fetch_array(MYSQLI_ASSOC))
+                    $result[] = $row;
+                break;
+            case 'param':
+                while ($row = $res->fetch_array(MYSQLI_ASSOC))
+                    $result[] = $row[$paramter];
+                break;
+            case 'id':
+                $result = self::$_mysql->insert_id;
+                break;
+            default:
+                $result = $res;
+                break;
         }
-        $this->close();
-        return $this->result;
+        return $result;
     }
 
-    private function close() {
-        $this->db->close();
+    public function close() {
+        self::$_mysql->close();
     }
+
+    private function __construct() {}
 
  }

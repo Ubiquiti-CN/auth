@@ -61,4 +61,4 @@ $config = array(
     'name' => DB_DBNAME,
     'port' => DB_PORT,
 );
-$mysql = new UbntMysql($config);
+$mysql = UbntMysql::get_instance($config);
