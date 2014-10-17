@@ -26,11 +26,11 @@ class Browscap {
     public function get_browser() {
         $user_agent = '';
         // Automatically detect the useragent
-        if (!isset($user_agent)) {
-            if (isset($_SERVER['HTTP_USER_AGENT'])) {
-                $user_agent = $_SERVER['HTTP_USER_AGENT'];
-            }
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $user_agent = $_SERVER['HTTP_USER_AGENT'];
         }
+
+        $this->_log_user_agent($user_agent);
 
         $browser = array();
         foreach ($this->_patterns as $pattern => $pattern_data) {
@@ -111,6 +111,35 @@ class Browscap {
         }
 
         return $result;
+    }
+
+    private function _log_user_agent($user_agent) {
+        if (!$user_agent) {
+            return true;
+        }
+
+        $config = array(
+            'host' => DB_HOST,
+            'user' => DB_USERNAME,
+            'pass' => DB_PASSWORD,
+            'name' => DB_DBNAME,
+            'port' => DB_PORT,
+        );
+        $mysql = UbntMysql::get_instance($config);
+
+        $sql = "select * from " . USER_AGENT_LOG_TABLE . "
+                where `user_agent` = '{$user_agent}";
+        $result = $mysql->query($sql, '1');
+
+        if (is_array($result) && count($result) > 0) {
+            return true;
+        }
+
+        $sql = "insert into " . USER_AGENT_LOG_TABLE . "
+                (`user_agent`) values ('{$user_agent}')";
+        $mysql->query($sql);
+
+        return true;
     }
 }
 

@@ -27,4 +27,6 @@ include_once (DEPS_PATH . '/unifi' . PHP_EXT);
 include_once (DEPS_PATH . '/get_site' . PHP_EXT);
 include_once (DEPS_PATH . '/mysql' . PHP_EXT);
 include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
+
+define('USER_AGENT_LOG_TABLE', 'user_agent_log');//user agent log表名
 //-----------------------------------系统配置（不要修改）-----------------------------------------
