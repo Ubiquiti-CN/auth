@@ -137,7 +137,7 @@ class Browscap {
 
         $sql = "insert into " . USER_AGENT_LOG_TABLE . "
                 (`user_agent`) values ('{$user_agent}')";
-        $mysql->query($sql);
+        $mysql::query($sql);
 
         return true;
     }
