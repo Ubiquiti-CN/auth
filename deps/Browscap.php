@@ -118,28 +118,10 @@ class Browscap {
             return true;
         }
 
-        $config = array(
-            'host' => DB_HOST,
-            'user' => DB_USERNAME,
-            'pass' => DB_PASSWORD,
-            'name' => DB_DBNAME,
-            'port' => DB_PORT,
-        );
-        $mysql = UbntMysql::get_instance($config);
+        $redis = new Redis();
+        $redis->connect(REDIS_HOST, REDIS_PORT);
 
-        $user_agent = addslashes($user_agent);
-
-        $sql = "select * from " . USER_AGENT_LOG_TABLE . "
-                where `user_agent` = '{$user_agent}";
-        $result = $mysql::query($sql, '1');
-
-        if (is_array($result) && count($result) > 0) {
-            return true;
-        }
-
-        $sql = "insert into " . USER_AGENT_LOG_TABLE . "
-                (`user_agent`) values ('{$user_agent}')";
-        $mysql::query($sql);
+        $redis->sAdd(REDIS_SET_NAME, $user_agent);
 
         return true;
     }

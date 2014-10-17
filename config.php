@@ -28,5 +28,8 @@ include_once (DEPS_PATH . '/get_site' . PHP_EXT);
 include_once (DEPS_PATH . '/mysql' . PHP_EXT);
 include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
 
-define('USER_AGENT_LOG_TABLE', 'user_agent_log');//user agent log表名
+/* redis 为记录用户agent */
+define('REDIS_HOST', '127.0.0.1');
+define('REDIS_PORT', 6379);
+define('REDIS_SET_NAME', 'user_agent');
 //-----------------------------------系统配置（不要修改）-----------------------------------------
