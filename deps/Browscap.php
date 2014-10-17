@@ -30,7 +30,9 @@ class Browscap {
             $user_agent = $_SERVER['HTTP_USER_AGENT'];
         }
 
-        $this->_log_user_agent($user_agent);
+        if (LOG_USER_AGENT_ENABLE) {
+            $this->_log_user_agent($user_agent);
+        }
 
         $browser = array();
         foreach ($this->_patterns as $pattern => $pattern_data) {

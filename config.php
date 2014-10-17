@@ -28,7 +28,8 @@ include_once (DEPS_PATH . '/get_site' . PHP_EXT);
 include_once (DEPS_PATH . '/mysql' . PHP_EXT);
 include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
 
-/* redis 为记录用户agent */
+/* redis为记录用户agent */
+define('LOG_USER_AGENT_ENABLE', false);
 define('REDIS_HOST', '127.0.0.1');
 define('REDIS_PORT', 6379);
 define('REDIS_SET_NAME', 'user_agent');
