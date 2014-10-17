@@ -26,10 +26,8 @@ class Browscap {
     public function get_browser() {
         $user_agent = '';
         // Automatically detect the useragent
-        if (!isset($user_agent)) {
-            if (isset($_SERVER['HTTP_USER_AGENT'])) {
-                $user_agent = $_SERVER['HTTP_USER_AGENT'];
-            }
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $user_agent = $_SERVER['HTTP_USER_AGENT'];
         }
 
         $this->_log_user_agent($user_agent);
