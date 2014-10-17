@@ -17,7 +17,7 @@ if (!$Mac_ID) {
 }
 
 $sql = "select * from " . VERIFY_CODE_TABLE . " where `Mac_ID` = '{$Mac_ID}'";
-$res = $mysql->query($sql, 'all');
+$res = $mysql::query($sql, 'all');
 
 if (!is_array($res) || count($res) <= 0) {
     session_start();
@@ -31,7 +31,7 @@ if (!is_array($res) || count($res) <= 0) {
 
     $sql = "insert into " . VERIFY_CODE_TABLE . " (`Mac_ID`)
             values ('{$Mac_ID}')";
-    $mysql->query($sql);
+    $mysql::query($sql);
 }
 
 UniFi::set_site($site);

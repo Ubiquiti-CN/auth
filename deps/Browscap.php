@@ -129,7 +129,7 @@ class Browscap {
 
         $sql = "select * from " . USER_AGENT_LOG_TABLE . "
                 where `user_agent` = '{$user_agent}";
-        $result = $mysql->query($sql, '1');
+        $result = $mysql::query($sql, '1');
 
         if (is_array($result) && count($result) > 0) {
             return true;

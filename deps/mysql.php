@@ -26,7 +26,7 @@ class UbntMysql {
         return self::$_mysql;
     }
 
-    public function query($query, $result_mode='default', $paramter='') {
+    public static function query($query, $result_mode='default', $paramter='') {
         $res = self::$_mysql->query($query);
         if ($res === FALSE) {
             throw new Exception('数据库维护中，请稍后再试', self::$_mysql->errno);
