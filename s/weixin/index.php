@@ -7,6 +7,13 @@ include_once (CONFIG_PATH . '/' . $site . PHP_EXT);
 $Mac_ID = isset($_GET['id']) ? addslashes($_GET['id']) : '';
 $fromUserName = isset($_GET['fromUserName']) ? addslashes($_GET['fromUserName']) : '';
 
+// todo 客户端判断
+/*
+$bc = new Browscap();
+echo "<pre>";
+print_r($bc->get_browser());
+ */
+
 $sql = "select `Mac_ID` from " . WEIXIN_TABLE . "
         where `Mac_ID` = '{$Mac_ID}'
         and `ticket` != ''";
