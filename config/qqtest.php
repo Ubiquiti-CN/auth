@@ -17,5 +17,5 @@ define('QQ_APPKEY', '');
 define('QQ_CALLBACK_URL', '');
 define('QQ_ADD_IDOL_BY_NAME', '');
 define('QQ_SEND_WEIBO_MESSAGE', '');
-define('QQ_DEBUG', '');
+define('QQ_DEBUG', );
 //-----------------------------------qq微博------------------------------------------------------
