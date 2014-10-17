@@ -127,6 +127,8 @@ class Browscap {
         );
         $mysql = UbntMysql::get_instance($config);
 
+        $user_agent = addslashes($user_agent);
+
         $sql = "select * from " . USER_AGENT_LOG_TABLE . "
                 where `user_agent` = '{$user_agent}";
         $result = $mysql::query($sql, '1');

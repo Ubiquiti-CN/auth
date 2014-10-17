@@ -2,7 +2,7 @@
 
 class UbntMysql {
 
-    private static $_mysql=null;
+    public static $mysql=null;
     private static $_db=null;
     public static function get_instance($db_config) {
         if (self::$_db instanceof UbntMysql) {
@@ -22,16 +22,16 @@ class UbntMysql {
             $charset = isset($db_config['char']) ? $db_config['char'] : 'utf8';
             if ($charset)
                 $db->set_charset($charset);
-            self::$_mysql = $db;
+            self::$mysql = $db;
             self::$_db = new self();
         }
         return self::$_db;
     }
 
     public static function query($query, $result_mode='default', $paramter='') {
-        $res = self::$_mysql->query($query);
+        $res = self::$mysql->query($query);
         if ($res === FALSE) {
-            throw new Exception('数据库维护中，请稍后再试', self::$_mysql->errno);
+            throw new Exception('数据库维护中，请稍后再试', self::$mysql->errno);
         }
         $result = '';
         switch ($result_mode) {
@@ -55,7 +55,7 @@ class UbntMysql {
                     $result[] = $row[$paramter];
                 break;
             case 'id':
-                $result = self::$_mysql->insert_id;
+                $result = self::$mysql->insert_id;
                 break;
             default:
                 $result = $res;
@@ -65,7 +65,7 @@ class UbntMysql {
     }
 
     public function close() {
-        self::$_mysql->close();
+        self::$mysql->close();
     }
 
     private function __construct() {}
