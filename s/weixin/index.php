@@ -7,36 +7,24 @@ include_once (CONFIG_PATH . '/' . $site . PHP_EXT);
 $Mac_ID = isset($_GET['id']) ? addslashes($_GET['id']) : '';
 $fromUserName = isset($_GET['fromUserName']) ? addslashes($_GET['fromUserName']) : '';
 
-// todo 客户端判断
-$bc = new Browscap();
-var_dump($bc->get_type());
-/*
-$bc = new Browscap();
-echo "<pre>";
-print_r($bc->get_browser());
- */
-
-$sql = "select `Mac_ID` from " . WEIXIN_TABLE . "
-        where `Mac_ID` = '{$Mac_ID}'
-        and `ticket` != ''";
-$res = $mysql::query($sql, '1');
-
-if ($res) {
-    include_once (DEPS_PATH . '/weixin_success.php');
-}
-
 if (!$Mac_ID) {
     header('Location: template/introduce.html');
     exit();
 }
 
-$sql = "select * from " . WEIXIN_TABLE . "
+$sql = "select `Mac_ID` from " . WEIXIN_TABLE . "
         where `Mac_ID` = '{$Mac_ID}'
-        and `ticket` = 'authorized'";
-$res = $mysql::query($sql, 'all');
+        and `ticket` != ''";
+$res = $mysql::query($sql, 'row');
 
-if (!is_array($res) || count($res) <= 0) {
-    if (!$fromUserName) {
+if (is_array($res) && count($res) > 0) {
+    include_once (DEPS_PATH . '/weixin_success.php');
+}
+
+if ($res['ticket'] != 'authorized') {
+    $bc = new Browscap();
+    $client_type = $bc->get_type();
+    if (!$fromUserName && $client_type != Browscap::MOBILE) {
         include_once (WEIXIN_PATH . '/class/wechat.class.php');
         $options = array(
             'token' => WECHAT_TOKEN, //填写你设定的key
@@ -46,7 +34,12 @@ if (!is_array($res) || count($res) <= 0) {
 
         $weObj = new Wechat($options);
 
-        $sql = "select `Mac_ID`, `scene_id`, `created_at`, `updated_at`, `ticket` from " . WEIXIN_TABLE . " where `Mac_ID` = '{$Mac_ID}' and `ticket` != 'authorized' limit 1";
+        $sql = "select `Mac_ID`, `scene_id`, `created_at`,
+                       `updated_at`, `ticket`
+                from " . WEIXIN_TABLE . "
+                where `Mac_ID` = '{$Mac_ID}'
+                and `ticket` != 'authorized'
+                limit 1";
         $result = $mysql::query($sql, 'all');
         $expire = 500;
         if (!is_array($result) || count($result) < 0) {
