@@ -19,7 +19,7 @@ $arr = array(
     "database" => "test"
 );
 $setting = "<?php die('forbidden'); ?>\n";
-$setting .= json_encode($_POST);
+$setting .= json_encode($arr);
 $setting = str_replace("\/", "/",$setting);
 $incFile = fopen("inc.php","w+") or die("请设置inc.php的权限为777");
 if(fwrite($incFile, $setting)){
