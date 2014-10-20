@@ -12,7 +12,7 @@ if (!$Mac_ID) {
     exit();
 }
 
-$sql = "select `Mac_ID` from " . WEIXIN_TABLE . "
+$sql = "select * from " . WEIXIN_TABLE . "
         where `Mac_ID` = '{$Mac_ID}'
         and `ticket` != ''";
 $res = $mysql::query($sql, 'row');
