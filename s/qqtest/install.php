@@ -26,7 +26,6 @@ if(fwrite($incFile, $setting)){
     echo "配置成功";
 
     fclose($incFile);
-    fclose(fopen("setted.inc", "w"));
 }else{
     echo "Error";
 }
