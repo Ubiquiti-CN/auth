@@ -15,7 +15,7 @@ define('QQ_PATH', SDK_PATH . '/qq');
 /* cookie 存放路径 */
 define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
 /* Browscap cache和ini文件地址 */
-define('BROWSCAP_CACHE_FILE', TMP_PATH . '/cache.php');
+define('BROWSCAP_CACHE_FILE', TMP_PATH . '/cache' . PHP_EXT);
 define('BROWSCAP_CACHE_LOADED', false);
 
 //UniFi 微信和验证码授权上网配置信息

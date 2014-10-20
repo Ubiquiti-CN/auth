@@ -8,6 +8,8 @@ $Mac_ID = isset($_GET['id']) ? addslashes($_GET['id']) : '';
 $fromUserName = isset($_GET['fromUserName']) ? addslashes($_GET['fromUserName']) : '';
 
 // todo 客户端判断
+$bc = new Browscap();
+var_dump($bc->get_type());
 /*
 $bc = new Browscap();
 echo "<pre>";

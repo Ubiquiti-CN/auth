@@ -23,6 +23,16 @@ class Browscap {
         return true;
     }
 
+    const MOBILE = 'Mobile';
+    const NOT_MOBILE = 'Not_Mobile';
+    public function get_type() {
+        if (stripos($_SERVER['HTTP_USER_AGENT'], self::MOBILE)) {
+            return self::MOBILE;
+        } else {
+            return self::NOT_MOBILE;
+        }
+    }
+
     public function get_browser() {
         $user_agent = '';
         // Automatically detect the useragent
