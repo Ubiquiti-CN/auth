@@ -15,8 +15,8 @@ define('QQ_PATH', SDK_PATH . '/qq');
 /* cookie 存放路径 */
 define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
 /* Browscap cache和ini文件地址 */
-define('BROWSCAP_CACHE_FILE', TMP_PATH . '/cache.php');
-define('BROWSCAP_CACHE_LOADED', false);
+//define('BROWSCAP_CACHE_FILE', TMP_PATH . '/cache' . PHP_EXT);
+//define('BROWSCAP_CACHE_LOADED', false);
 
 //UniFi 微信和验证码授权上网配置信息
 define('CONFIG_PATH', ROOT_PATH . '/config');
@@ -28,5 +28,9 @@ include_once (DEPS_PATH . '/get_site' . PHP_EXT);
 include_once (DEPS_PATH . '/mysql' . PHP_EXT);
 include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
 
-define('USER_AGENT_LOG_TABLE', 'user_agent_log');//user agent log表名
+/* redis为记录用户agent */
+define('LOG_USER_AGENT_ENABLE', false);
+define('REDIS_HOST', '127.0.0.1');
+define('REDIS_PORT', 6379);
+define('REDIS_SET_NAME', 'user_agent');
 //-----------------------------------系统配置（不要修改）-----------------------------------------
