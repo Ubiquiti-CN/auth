@@ -15,6 +15,7 @@ define('DEFAULT_URL', 'http://www.ubnt.com.cn');
 define('WEIBO_ENABLE', false);
 define('WEIXIN_ENABLE', false);
 define('VERIFY_CODE_ENABLE', false);
+define('QQ_ENABLE', false);
 
 //-----------------------------------微博------------------------------------------------------
 define('WEIBO_AKEY', '');
@@ -42,6 +43,15 @@ define('WECHAT_APP_SECRET', '');
 define('WEIXIN_AUTH_MESSAGE', '');//当用户发送此内容才能获取返回
 define('WEIXIN_WELCOME_MESSAGE', '');//关注后的欢迎内容
 //-----------------------------------微信------------------------------------------------------
+
+//-----------------------------------qq微博----------------------------------------------------
+define('QQ_APPID', '');
+define('QQ_APPKEY', '');
+define('QQ_CALLBACK_URL', '');
+define('QQ_ADD_IDOL_BY_NAME', '');
+define('QQ_SEND_WEIBO_MESSAGE', '');
+define('QQ_DEBUG', false);
+//-----------------------------------qq微博----------------------------------------------------
 
 //-----------------------------------MySQL----------------------------------------------------
 /* 配置mysql */
