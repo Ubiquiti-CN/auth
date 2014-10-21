@@ -30,7 +30,7 @@ class ErrorCase{
     public function showError($code, $description = '$'){
         $recorder = new Recorder();
         if(! $recorder->readInc("errorReport")){
-            die();//die quietly
+            return;
         }
 
 
