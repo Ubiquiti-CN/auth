@@ -31,3 +31,12 @@ define('REDIS_HOST', '127.0.0.1');
 define('REDIS_PORT', 6379);
 define('REDIS_SET_NAME', 'user_agent');
 //-----------------------------------系统配置（不要修改）-----------------------------------------
+
+//-----------------------------------前端配置--------------------------------------------------
+define('STATIC_PATH', '../../statics');
+define('CSS_PATH', STATIC_PATH . '/css');
+define('JS_PATH', STATIC_PATH . '/js');
+define('BOOTSTRAP_CSS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/css');
+define('BOOTSTRAP_JS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/js');
+define('JQUERY_PATH', STATIC_PATH . '/node_modules/jquery/dist');
+//-----------------------------------前端配置--------------------------------------------------
