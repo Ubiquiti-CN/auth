@@ -2,7 +2,7 @@
 
 # apache rewrite rule
 RewriteEngine On
-RewriteCond $1 !^(index\.php|rewrite\.php)
+RewriteCond $1 !^(index\.php)
 RewriteRule ^guest/s/([^/]*)/(.*)$ rewrite.php?site=$1&$2 [QSA]
 
 
