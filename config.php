@@ -27,6 +27,7 @@ include_once (DEPS_PATH . '/Mysql' . PHP_EXT);
 include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
 
 include_once (LIBRARIES_PATH . '/Bootstrap' . PHP_EXT);
+include_once (LIBRARIES_PATH . '/DB' . PHP_EXT);
 include_once (LIBRARIES_PATH . '/UniFi' . PHP_EXT);
 //-----------------------------------系统配置（不要修改）-----------------------------------------
 
@@ -38,3 +39,7 @@ define('BOOTSTRAP_CSS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/css');
 define('BOOTSTRAP_JS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/js');
 define('JQUERY_PATH', STATIC_PATH . '/node_modules/jquery/dist');
 //-----------------------------------前端配置---------------------------------------------------
+
+//-----------------------------------初始化-----------------------------------------------------
+$mysql = DB::get_instance();
+//-----------------------------------初始化-----------------------------------------------------

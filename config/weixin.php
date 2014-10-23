@@ -29,21 +29,5 @@ define('WEIXIN_WELCOME_MESSAGE', '');//关注后的欢迎内容
 //-----------------------------------微信------------------------------------------------------
 
 //-----------------------------------MySQL----------------------------------------------------
-/* 配置mysql */
-define('DB_HOST', 'localhost');
-define('DB_USERNAME', '');
-define('DB_PASSWORD', '');//数据库密码
-define('DB_DBNAME', '');//数据库库名
-define('DB_PORT', '3306');
-
 define('WEIXIN_TABLE', '');//微信表名
 //-----------------------------------MySQL----------------------------------------------------
-
-$config = array(
-    'host' => DB_HOST,
-    'user' => DB_USERNAME,
-    'pass' => DB_PASSWORD,
-    'name' => DB_DBNAME,
-    'port' => DB_PORT,
-);
-$mysql = UbntMysql::get_instance($config);
