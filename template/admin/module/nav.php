@@ -1,9 +1,9 @@
 <ul class="left-content left-nav">
     <li>
-        <a class="create_site" href="create_site.php">site创建</a>
+        <a class="create_site" href="../create_site.php">site创建</a>
     </li>
     <li>
-        <a class="manage_site" href="manage_site_list.php">site管理</a>
+        <a class="manage_site" href="../manage_site_list.php">site管理</a>
     </li>
 </ul>
 <script>

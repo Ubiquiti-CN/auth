@@ -1,6 +1,6 @@
 <?php
 $title = 'site创建';
-include_once('../module/header.php');
+include_once(TEMPLATE_PATH . '/global/header.php');
 ?>
 
 <div class="container admin-wrapper">

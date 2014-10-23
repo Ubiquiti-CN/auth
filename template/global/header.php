@@ -19,6 +19,13 @@ include_once('../../config.php');
     ?>
     <script src="<?php echo JQUERY_PATH ?>/jquery.min.js"></script>
     <script src="<?php echo BOOTSTRAP_JS_PATH ?>/bootstrap.min.js"></script>
+    <?php
+        if (isset($js_array) && is_array($js_array) && count($js_array) > 0) {
+            foreach($js_array as $k => $v) {
+                echo '<script src="' . JS_PATH . '/' . $v . '"></script>';
+            }
+        }
+    ?>
     <title><?php echo (isset($title) ? $title : 'ubnt');?></title>
 </head>
 <body>

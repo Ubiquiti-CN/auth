@@ -8,7 +8,6 @@ define('LIBRARIES_PATH', ROOT_PATH . '/libraries');
 define('SITES_PATH', ROOT_PATH . '/s');
 define('SDK_PATH', ROOT_PATH . '/sdk');
 define('TMP_PATH', ROOT_PATH . '/tmp');
-define('TEMPLATE_PATH', ROOT_PATH . '/template');
 
 /* SDK 路径 */
 define('WEIXIN_PATH', SDK_PATH . '/weixin');
@@ -40,6 +39,7 @@ define('JS_PATH', STATIC_PATH . '/js');
 define('BOOTSTRAP_CSS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/css');
 define('BOOTSTRAP_JS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/js');
 define('JQUERY_PATH', STATIC_PATH . '/node_modules/jquery/dist');
+define('TEMPLATE_PATH', ROOT_PATH . '/template');
 //-----------------------------------前端配置---------------------------------------------------
 
 //-----------------------------------初始化-----------------------------------------------------
