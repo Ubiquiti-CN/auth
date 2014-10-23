@@ -22,3 +22,22 @@ include_once('../../config.php');
     <title><?php echo (isset($title) ? $title : 'ubnt');?></title>
 </head>
 <body>
+
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button data-target=".navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle collapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="http://www.ubnt.com.cn" class="navbar-brand hidden-sm">ubnt</a>
+            </div>
+            <div role="navigation" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                </ul>
+            </div>
+        </div>
+    </div>

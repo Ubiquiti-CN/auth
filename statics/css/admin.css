@@ -1,0 +1,17 @@
+.admin-wrapper {padding-top: 15px;}
+    .admin-wrapper .left-content,
+    .admin-wrapper .right-content {border: 1px solid #ddd;border-radius: 5px;padding: 20px;}
+
+    .admin-wrapper .left-content {padding: 20px 10px;}
+    .left-content.left-nav {}
+        .left-content.left-nav li {margin-bottom: 5px;}
+        .left-content.left-nav li:last-child {margin-bottom: 0;}
+        .left-content.left-nav a {display: block;height: 40px;line-height: 40px;padding: 0 10px;}
+        .left-content.left-nav a.selected,
+        .left-content.left-nav a.selected,
+        .left-content.left-nav a:hover {text-decoration: none;background: #428bca;color: #fff;border-radius: 3px;}
+
+    .manage-site-content-list {}
+        .manage-site-content-list table > thead > tr > th  {border-width: 1px;}
+        .manage-site-content-list .table {margin-bottom: 10px;}
+        .manage-site-content-list .pagination {margin: 0;float: right;}
