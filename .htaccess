@@ -4,6 +4,6 @@
 RewriteEngine On
 RewriteCond $1 !^(index\.php)
 RewriteRule ^guest/s/([^/]*)/(.*)$ index.php?site=$1&$2&mode=portal [QSA]
-RewriteRule ^admin$ index.php?mode=config [L]
+RewriteRule ^admin/(.*)$ index.php?mode=config&view=$1 [QSA]
 
 
