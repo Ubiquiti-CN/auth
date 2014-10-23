@@ -1,5 +1,4 @@
 <?php
-include_once('../../config.php');
 $title = 'site详情';
 $nav = 'nav.php';
 $content = 'manage_site_detail_content.php';

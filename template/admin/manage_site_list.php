@@ -1,5 +1,4 @@
 <?php
-include_once('../../config.php');
 $title = 'site列表';
 $nav = 'nav.php';
 $content = 'manage_site_list_content.php';
