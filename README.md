@@ -77,7 +77,6 @@ UniFi 微信、微博、QQ和验证码授权上网代码
      `content` text not NULL DEFAULT ''
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
     
-3.config下配置需要的portal类型（微信、微博、QQ、验证码）
 
 
 ###常见问题
