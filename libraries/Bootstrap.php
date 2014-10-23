@@ -12,8 +12,8 @@ class Bootstrap {
 
                 break;
             case 'config':
-
-                include TEMPLATE_PATH . "/admin/create_site.php";
+                $view = (Uri::call('view')) ? Uri::call('view') : 'create_site';
+                include TEMPLATE_PATH . "/admin/{$view}.php";
                 break;
             default:
                 break;

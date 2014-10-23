@@ -8,11 +8,11 @@
         </thead>
         <tbody>
         <tr>
-            <td><a href="../manage_site_detail.php">weixin</a></td>
+            <td><a href="/admin/manage_site_detail">weixin</a></td>
             <td>2014-11-11</td>
         </tr>
         <tr>
-            <td><a href="../manage_site_detail.php">weibo</a></td>
+            <td><a href="/admin/manage_site_detail">weibo</a></td>
             <td>2014-11-11</td>
         </tr>
         </tbody>
