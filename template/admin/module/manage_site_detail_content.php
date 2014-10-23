@@ -4,7 +4,7 @@
         <div class="col-xs-offset-1">
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="verifyCode"> verifyCode
+                    <input type="checkbox" class="auth-type" id="" value="verifycode"> verifyCode
                 </label>
             </div>
             <div class="col-xs-12">
@@ -27,6 +27,7 @@
     <button type="submit" class="btn btn-default">Submit</button>
 </form>
 <?php
+    include_once(TEMPLATE_PATH . '/global/verifycode_config.php');
     include_once(TEMPLATE_PATH . '/global/weixin_config.php');
     include_once(TEMPLATE_PATH . '/global/weibo_config.php');
     include_once(TEMPLATE_PATH . '/global/qq_config.php');
