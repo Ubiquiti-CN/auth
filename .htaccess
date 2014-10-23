@@ -1,0 +1,8 @@
+# nginx rewrite rule
+
+# apache rewrite rule
+RewriteEngine On
+RewriteCond $1 !^(index\.php)
+RewriteRule ^guest/s/([^/]*)/(.*)$ index.php?site=$1&$2 [QSA]
+
+
