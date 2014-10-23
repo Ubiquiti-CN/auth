@@ -26,6 +26,7 @@ include_once (DEPS_PATH . '/get_site' . PHP_EXT);
 include_once (DEPS_PATH . '/Mysql' . PHP_EXT);
 include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
 
+include_once (LIBRARIES_PATH . '/Bootstrap' . PHP_EXT);
 include_once (LIBRARIES_PATH . '/UniFi' . PHP_EXT);
 //-----------------------------------系统配置（不要修改）-----------------------------------------
 
