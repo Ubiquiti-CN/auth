@@ -17,7 +17,7 @@ UniFi 微信、微博和验证码授权上网代码
 2.搭建LNMP（Linux+Nginx+MySQL+PHP）环境，可参照[lnmp](http://lnmp.org/install.html)
 + PHP需安装curl插件
 
-3.下载本次案例代码，将weixin重命名为guest，放到/home/wwwroot/目录下
+3.下载本次案例代码，将auth重命名为guest，放到/home/wwwroot/目录下
 
 ###代码配置
 1.配置config文件
