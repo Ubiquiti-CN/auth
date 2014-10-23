@@ -22,9 +22,7 @@ if (is_array($res) && count($res) > 0) {
 }
 
 if ($res['ticket'] != 'authorized') {
-    $bc = new Browscap();
-    $client_type = $bc->get_type();
-    if (!$fromUserName && $client_type != Browscap::MOBILE) {
+    if (!$fromUserName && Browscap::get_type() != Browscap::MOBILE) {
         include_once (WEIXIN_PATH . '/class/wechat.class.php');
         $options = array(
             'token' => WECHAT_TOKEN, //填写你设定的key

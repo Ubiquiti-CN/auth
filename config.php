@@ -1,17 +1,19 @@
 <?php
 
-$start_time = microtime(true);
-
 //-----------------------------------系统配置（不要修改）-----------------------------------------
 define('PHP_EXT', '.php');
-define('ROOT_PATH', dirname(__FILE__));
+define('ROOT_PATH', __DIR__);
 define('DEPS_PATH', ROOT_PATH . '/deps');
+define('LIBRARIES_PATH', ROOT_PATH . '/libraries');
 define('SITES_PATH', ROOT_PATH . '/s');
 define('SDK_PATH', ROOT_PATH . '/sdk');
 define('TMP_PATH', ROOT_PATH . '/tmp');
+
+/* SDK 路径 */
 define('WEIXIN_PATH', SDK_PATH . '/weixin');
 define('WEIBO_PATH', SDK_PATH . '/weibo');
 define('QQ_PATH', SDK_PATH . '/qq');
+
 /* cookie 存放路径 */
 define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
 
@@ -19,24 +21,19 @@ define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 include_once (CONFIG_PATH . '/_global' . PHP_EXT);
 
-include_once (DEPS_PATH . '/VerifyCode' . PHP_EXT);
-include_once (DEPS_PATH . '/unifi' . PHP_EXT);
+include_once (DEPS_PATH . '/verify_code' . PHP_EXT);
 include_once (DEPS_PATH . '/get_site' . PHP_EXT);
-include_once (DEPS_PATH . '/mysql' . PHP_EXT);
+include_once (DEPS_PATH . '/Mysql' . PHP_EXT);
 include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
 
-/* redis为记录用户agent */
-define('LOG_USER_AGENT_ENABLE', false);
-define('REDIS_HOST', '127.0.0.1');
-define('REDIS_PORT', 6379);
-define('REDIS_SET_NAME', 'user_agent');
+include_once (LIBRARIES_PATH . '/UniFi' . PHP_EXT);
 //-----------------------------------系统配置（不要修改）-----------------------------------------
 
-//-----------------------------------前端配置--------------------------------------------------
+//-----------------------------------前端配置---------------------------------------------------
 define('STATIC_PATH', '../../statics');
 define('CSS_PATH', STATIC_PATH . '/css');
 define('JS_PATH', STATIC_PATH . '/js');
 define('BOOTSTRAP_CSS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/css');
 define('BOOTSTRAP_JS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/js');
 define('JQUERY_PATH', STATIC_PATH . '/node_modules/jquery/dist');
-//-----------------------------------前端配置--------------------------------------------------
+//-----------------------------------前端配置---------------------------------------------------
