@@ -19,7 +19,7 @@ define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
 
 //UniFi 微信和验证码授权上网配置信息
 define('CONFIG_PATH', ROOT_PATH . '/config');
-include_once (CONFIG_PATH . '/_global' . PHP_EXT);
+include_once (CONFIG_PATH . '/global' . PHP_EXT);
 
 include_once (DEPS_PATH . '/verify_code' . PHP_EXT);
 include_once (DEPS_PATH . '/get_site' . PHP_EXT);

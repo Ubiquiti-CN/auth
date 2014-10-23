@@ -24,7 +24,7 @@ UniFi 微信、微博、QQ和验证码授权上网代码
 + 方法二：git clone https://github.com/Ubiquiti-cn/auth.git /home/wwwroot/guest
 
 ###代码配置
-1.配置config/_global.php文件
+1.配置config/global.php文件
 
     //-----------------------------------UniFi----------------------------------------------------
     define('UNIFI_SERVER', 'https://x.x.x.x:8443');
