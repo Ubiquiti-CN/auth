@@ -1,5 +1,6 @@
 <form role="form" class="right-content" action="/admin/post/detail" method="post">
     <input type="hidden" name="submit" value="detail" />
+    <input type="hidden" name="site_id" value="<?php echo $site_id;?>" />
     <div class="form-group">
         <label for="site">功能开启</label>
         <div class="col-xs-offset-1">

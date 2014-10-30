@@ -1,5 +1,6 @@
 <script id="weixin-template" type="x-tmpl-mustache">
 <div id="weixin-config" class="row">
+    <input type="hidden" name="weixin_config" value="enable" />
     <div class="col-xs-offset-1">
         <div class="form-group">
             <label for="weixin_wifi_expired_time">授权过期时间（分钟）</label>

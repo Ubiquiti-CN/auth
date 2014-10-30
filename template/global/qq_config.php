@@ -1,5 +1,7 @@
 <script id="qq-template" type="x-tmpl-mustache">
 <div id="qq-config" class="row">
+    <input type="hidden" name="qq_config" value="enable" />
+
     <div class="col-xs-offset-1">
         <div class="form-group">
             <label for="qq_wifi_expired_time">授权过期时间（分钟）</label>
@@ -31,7 +33,7 @@
         </div>
         <div class="form-group">
             <label for="qq_debug"> debug
-                <input type="checkbox" id="qq_debug" name="qq_add_idol_by_name" >
+                <input type="checkbox" id="qq_debug" name="qq_debug" >
             </label>
         </div>
     </div>

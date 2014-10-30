@@ -1,5 +1,6 @@
 <script id="weibo-template" type="x-tmpl-mustache">
 <div id="weibo-config" class="row">
+    <input type="hidden" name="weibo_config" value="enable" />
     <div class="col-xs-offset-1">
         <div class="form-group">
             <label for="weibo_wifi_expired_time">授权过期时间（分钟）</label>
@@ -31,7 +32,7 @@
         </div>
         <div class="form-group">
             <label for="weibo_debug"> debug
-                <input type="checkbox" id="weibo_debug" name="weibo_add_idol_by_name" >
+                <input type="checkbox" id="weibo_debug" name="weibo_debug" >
             </label>
         </div>
     </div>

@@ -10,7 +10,7 @@
 
         <?php foreach ($sites as $key => $site):?>
         <tr>
-            <td><a href="/admin/manage_site/detail?<?php echo $site['id']?>"><?php echo $site['site_name']?></a></td>
+            <td><a href="/admin/manage_site/detail?id=<?php echo $site['id']?>"><?php echo $site['site_name']?></a></td>
             <td><?php echo $site['created_at'];?></td>
         </tr>
         <?php endforeach;?>
