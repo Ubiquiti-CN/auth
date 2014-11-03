@@ -3,10 +3,10 @@
 //-----------------------------------系统配置（不要修改）-----------------------------------------
 define('PHP_EXT', '.php');
 define('ROOT_PATH', __DIR__);
-define('DEPS_PATH', ROOT_PATH . '/deps');
 define('LIBRARIES_PATH', ROOT_PATH . '/libraries');
+define('DEPS_PATH', LIBRARIES_PATH . '/deps');
 define('SITES_PATH', ROOT_PATH . '/s');
-define('SDK_PATH', ROOT_PATH . '/sdk');
+define('SDK_PATH', LIBRARIES_PATH . '/sdk');
 define('TMP_PATH', ROOT_PATH . '/tmp');
 
 /* SDK 路径 */
