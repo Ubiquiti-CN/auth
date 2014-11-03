@@ -1,47 +1,15 @@
 <?php
 
-//-----------------------------------系统配置（不要修改）-----------------------------------------
-define('PHP_EXT', '.php');
-define('ROOT_PATH', __DIR__);
-define('DEPS_PATH', ROOT_PATH . '/deps');
-define('LIBRARIES_PATH', ROOT_PATH . '/libraries');
-define('SITES_PATH', ROOT_PATH . '/s');
-define('SDK_PATH', ROOT_PATH . '/sdk');
-define('TMP_PATH', ROOT_PATH . '/tmp');
+//-----------------------------------UniFi----------------------------------------------------
+define('UNIFI_SERVER', '');
+define('UNIFI_USER', '');
+define('UNIFI_PASSWORD', '');
+//-----------------------------------UniFi----------------------------------------------------
 
-/* SDK 路径 */
-define('WEIXIN_PATH', SDK_PATH . '/weixin');
-define('WEIBO_PATH', SDK_PATH . '/weibo');
-define('QQ_PATH', SDK_PATH . '/qq');
-
-/* cookie 存放路径 */
-define('COOKIE_FILE_PATH', TMP_PATH . '/unifi_cookie');
-
-//UniFi 微信和验证码授权上网配置信息
-define('CONFIG_PATH', ROOT_PATH . '/config');
-include_once (CONFIG_PATH . '/global' . PHP_EXT);
-
-include_once (DEPS_PATH . '/verify_code' . PHP_EXT);
-include_once (DEPS_PATH . '/get_site' . PHP_EXT);
-include_once (DEPS_PATH . '/Mysql' . PHP_EXT);
-include_once (DEPS_PATH . '/Browscap' . PHP_EXT);
-
-include_once (LIBRARIES_PATH . '/Bootstrap' . PHP_EXT);
-include_once (LIBRARIES_PATH . '/DB' . PHP_EXT);
-include_once (LIBRARIES_PATH . '/UniFi' . PHP_EXT);
-include_once (LIBRARIES_PATH . '/Uri' . PHP_EXT);
-//-----------------------------------系统配置（不要修改）-----------------------------------------
-
-//-----------------------------------前端配置---------------------------------------------------
-define('STATIC_PATH', '../../statics');
-define('CSS_PATH', STATIC_PATH . '/css');
-define('JS_PATH', STATIC_PATH . '/js');
-define('BOOTSTRAP_CSS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/css');
-define('BOOTSTRAP_JS_PATH', STATIC_PATH . '/node_modules/bootstrap/dist/js');
-define('JQUERY_PATH', STATIC_PATH . '/node_modules/jquery/dist');
-define('TEMPLATE_PATH', ROOT_PATH . '/template');
-//-----------------------------------前端配置---------------------------------------------------
-
-//-----------------------------------初始化-----------------------------------------------------
-$mysql = DB::get_instance();
-//-----------------------------------初始化-----------------------------------------------------
+//-----------------------------------MySQL----------------------------------------------------
+define('DB_HOST', 'localhost');//数据库HOST
+define('DB_USERNAME', '');//数据库用户名
+define('DB_PASSWORD', '');//数据库密码
+define('DB_DBNAME', '');//数据库库名
+define('DB_PORT', '3306');//数据库端口
+//-----------------------------------MySQL----------------------------------------------------
