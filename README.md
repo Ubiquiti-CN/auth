@@ -64,10 +64,21 @@ UniFi 微信、微博、QQ和验证码授权上网代码
      `auth_name` varchar(50) not null DEFAULT ''
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-    create table `site` (
-     `id` INT unsigned PRIMARY KEY auto_increment,
-     `auth_id` varchar(200) not NULL DEFAULT '',
-     `site_name` VARCHAR(50) NOT NULL DEFAULT ''
+    --
+    -- Dumping data for table `auth_type`
+    --
+
+    INSERT INTO `auth_type` (`id`, `auth_name`) VALUES
+    (1, 'verifyCode'),
+    (2, 'weibo '),
+    (3, 'weixin'),
+    (4, 'qq');
+
+    CREATE TABLE `site` (
+      `id` int(10) unsigned NOT NULL,
+      `auth_id` varchar(200) NOT NULL DEFAULT '',
+      `site_name` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
     CREATE TABLE `config` (
@@ -76,7 +87,6 @@ UniFi 微信、微博、QQ和验证码授权上网代码
      `auth_id` INT unsigned NOT NULL DEFAULT 0,
      `content` text not NULL DEFAULT ''
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-    
 
 
 ###常见问题
