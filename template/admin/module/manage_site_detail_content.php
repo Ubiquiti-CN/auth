@@ -6,22 +6,22 @@
         <div class="col-xs-offset-1">
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="verifycode" <?php if (isset($details) && isset($details[1])) echo "checked='checked'"?> > verifyCode
+                    <input type="checkbox" class="auth-type" id="" value="verifycode" <?php if (isset($auth_ids) && in_array(1, $auth_ids)) echo "checked='checked'"?> > verifyCode
                 </label>
             </div>
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="weibo" <?php if (isset($details) && isset($details[2])) echo "checked='checked'"?> > weibo
+                    <input type="checkbox" class="auth-type" id="" value="weibo" <?php if (isset($auth_ids) && in_array(2, $auth_ids)) echo "checked='checked'"?> > weibo
                 </label>
             </div>
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="weixin" <?php if (isset($details) && isset($details[3])) echo "checked='checked'"?> > weixin
+                    <input type="checkbox" class="auth-type" id="" value="weixin" <?php if (isset($auth_ids) && in_array(3, $auth_ids)) echo "checked='checked'"?> > weixin
                 </label>
             </div>
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="qq" <?php if (isset($details) && isset($details[4])) echo "checked='checked'"?> > qq
+                    <input type="checkbox" class="auth-type" id="" value="qq" <?php if (isset($auth_ids) && in_array(4, $auth_ids)) echo "checked='checked'"?> > qq
                 </label>
             </div>
         </div>

@@ -60,7 +60,8 @@ class Bootstrap {
                     $result['sites'] = self::get_site_list();
                 } else if ($template['func'] == 'detail') {
                     $result['site_id'] = Uri::call('id');
-                    $result['details'] = self::get_site_detail();
+                    $result['details'] = self::get_site_detail($result['site_id']);
+                    $result['auth_ids'] = self::get_site_auth_id($result['site_id']);
                 }
                 self::view($template, $result);
                 break;
@@ -91,10 +92,9 @@ class Bootstrap {
         }
     }
 
-    private static function get_site_detail() {
+    private static function get_site_detail($site_id) {
         global $mysql;
 
-        $site_id = Uri::call('id');
         $sql = "SELECT `auth_id`, `content` FROM `config` WHERE `site_id` = '{$site_id}'";
         $data = $mysql->query($sql, 'all');
 
@@ -107,12 +107,25 @@ class Bootstrap {
         return $result;
     }
 
+    private static function get_site_auth_id($site_id) {
+        global $mysql;
+
+        $sql = "SELECT `auth_id` FROM `site` WHERE `id` = '{$site_id}'";
+        $data = $mysql->query($sql, 'array');
+        if (is_array($data) && count($data)) {
+            return explode(',', $data['auth_id']);
+        } else
+            return '';
+    }
+
     private static function save_config() {
         global $mysql;
 
         $site_id = $_POST['site_id'];
+        $auth_array = array();
         if (isset($_POST['verifycode_config']) && $_POST['verifycode_config'] == 'enable') {
             $auth_id = 1;
+            $auth_array[] = $auth_id;
             $verifycode_config['verifycode_wifi_expired_time'] = $_POST['verifycode_wifi_expired_time'];
             $verifycode_config['verifycode_default_url'] = $_POST['verifycode_default_url'];
 
@@ -124,12 +137,11 @@ class Bootstrap {
             } else {
                 $sql = "INSERT INTO `config` (`site_id`, `auth_id`, `content`) VALUES ('{$site_id}', '{$auth_id}', '{$content}')";
             }
-            echo "<pre>";
-            echo $sql;
             $mysql->query($sql);
         }
         if (isset($_POST['qq_config']) && $_POST['qq_config'] == 'enable') {
             $auth_id = 4;
+            $auth_array[] = $auth_id;
             $qq_config['qq_wifi_expired_time'] = $_POST['qq_wifi_expired_time'];
             $qq_config['qq_default_url'] = $_POST['qq_default_url'];
             $qq_config['qq_app_id'] = $_POST['qq_app_id'];
@@ -151,6 +163,7 @@ class Bootstrap {
         }
         if (isset($_POST['weibo_config']) && $_POST['weibo_config'] == 'enable') {
             $auth_id = 2;
+            $auth_array[] = $auth_id;
             $weibo_config['weibo_wifi_expired_time'] = $_POST['weibo_wifi_expired_time'];
             $weibo_config['weibo_default_url'] = $_POST['weibo_default_url'];
             $weibo_config['weibo_app_id'] = $_POST['weibo_app_id'];
@@ -168,12 +181,11 @@ class Bootstrap {
             } else {
                 $sql = "INSERT INTO `config` (`site_id`, `auth_id`, `content`) VALUES ('{$site_id}', '{$auth_id}', '{$content}')";
             }
-            echo "<pre>";
-            echo $sql;
             $mysql->query($sql);
         }
         if (isset($_POST['weixin_config']) && $_POST['weixin_config'] == 'enable') {
             $auth_id = 3;
+            $auth_array[] = $auth_id;
             $weixin_config['weixin_wifi_expired_time'] = $_POST['weixin_wifi_expired_time'];
             $weixin_config['weixin_default_url'] = $_POST['weixin_default_url'];
             $weixin_config['weixin_token'] = $_POST['weixin_token'];
@@ -194,8 +206,12 @@ class Bootstrap {
             }
             $mysql->query($sql);
         }
-
-
+        $auth = implode(',', $auth_array);
+        $sql = "UPDATE `site` SET `auth_id` = '{$auth}' WHERE `id` = '{$site_id}'";
+        $mysql->query($sql);
+        $redirect = "/admin/manage_site/list";
+        header('Location: ' . $redirect);
+        return;
 
     }
 
