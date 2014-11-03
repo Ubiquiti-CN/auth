@@ -7,13 +7,14 @@
         </tr>
         </thead>
         <tbody>
+
+        <?php foreach ($sites as $key => $site):?>
         <tr>
-            <td><a href="/admin/manage_site_detail">weixin</a></td>
-            <td>2014-11-11</td>
+            <td><a href="/admin/manage_site/detail?id=<?php echo $site['id']?>"><?php echo $site['site_name']?></a></td>
+            <td><?php echo $site['created_at'];?></td>
         </tr>
-        <tr>
-            <td><a href="/admin/manage_site_detail">weibo</a></td>
-            <td>2014-11-11</td>
+        <?php endforeach;?>
+
         </tr>
         </tbody>
     </table>

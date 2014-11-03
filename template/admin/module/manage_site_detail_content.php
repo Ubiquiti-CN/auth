@@ -1,25 +1,27 @@
-<form role="form" class="right-content">
+<form role="form" class="right-content" action="/admin/post/detail" method="post">
+    <input type="hidden" name="submit" value="detail" />
+    <input type="hidden" name="site_id" value="<?php echo $site_id;?>" />
     <div class="form-group">
         <label for="site">功能开启</label>
         <div class="col-xs-offset-1">
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="verifycode"> verifyCode
+                    <input type="checkbox" class="auth-type" id="" value="verifycode" <?php if (isset($auth_ids) && in_array(1, $auth_ids)) echo "checked='checked'"?> > verifyCode
                 </label>
             </div>
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="weibo"> weibo
+                    <input type="checkbox" class="auth-type" id="" value="weibo" <?php if (isset($auth_ids) && in_array(2, $auth_ids)) echo "checked='checked'"?> > weibo
                 </label>
             </div>
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="weixin"> weixin
+                    <input type="checkbox" class="auth-type" id="" value="weixin" <?php if (isset($auth_ids) && in_array(3, $auth_ids)) echo "checked='checked'"?> > weixin
                 </label>
             </div>
             <div class="col-xs-12">
                 <label>
-                    <input type="checkbox" class="auth-type" id="" value="qq"> qq
+                    <input type="checkbox" class="auth-type" id="" value="qq" <?php if (isset($auth_ids) && in_array(4, $auth_ids)) echo "checked='checked'"?> > qq
                 </label>
             </div>
         </div>

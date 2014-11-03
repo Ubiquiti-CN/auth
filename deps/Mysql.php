@@ -19,7 +19,7 @@ class UbntMysql {
                     throw new Exception('数据库维护中，请稍后再试', $db->errno);
                 }
             }
-            $charset = isset($db_config['char']) ? $db_config['char'] : 'utf8';
+            $charset = isset($db_config['char']) ? $db_config['char'] : 'utf8mb4';
             if ($charset)
                 $db->set_charset($charset);
             self::$mysql = $db;
