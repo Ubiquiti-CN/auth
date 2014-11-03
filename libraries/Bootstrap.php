@@ -31,7 +31,7 @@ class Bootstrap {
     }
 
     public static function post($func) {
-        global $mysql;
+        $mysql = DB::get_instance();
 
         if ($func == 'site') {
             if (isset($_POST['submit']) && $_POST['submit'] == 'site') {
@@ -93,7 +93,7 @@ class Bootstrap {
     }
 
     private static function get_site_detail($site_id) {
-        global $mysql;
+        $mysql = DB::get_instance();
 
         $sql = "SELECT `auth_id`, `content` FROM `config` WHERE `site_id` = '{$site_id}'";
         $data = $mysql->query($sql, 'all');
@@ -119,7 +119,7 @@ class Bootstrap {
     }
 
     private static function save_config() {
-        global $mysql;
+        $mysql = DB::get_instance();
 
         $site_id = $_POST['site_id'];
         $auth_array = array();
