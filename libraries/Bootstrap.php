@@ -93,6 +93,18 @@ class Bootstrap {
 
     private static function get_site_detail() {
         global $mysql;
+
+        $site_id = Uri::call('id');
+        $sql = "SELECT `auth_id`, `content` FROM `config` WHERE `site_id` = '{$site_id}'";
+        $data = $mysql->query($sql, 'all');
+
+        $result = array();
+        if (is_array($data) && count($data)) {
+            foreach ($data as $val) {
+                $result[$val['auth_id']] = $val['content'];
+            }
+        }
+        return $result;
     }
 
     private static function save_config() {
@@ -104,7 +116,7 @@ class Bootstrap {
             $verifycode_config['verifycode_wifi_expired_time'] = $_POST['verifycode_wifi_expired_time'];
             $verifycode_config['verifycode_default_url'] = $_POST['verifycode_default_url'];
 
-            $content = json_encode($verifycode_config);
+            $content = json_encode($verifycode_config, JSON_UNESCAPED_UNICODE);
             $sql_count = "SELECT COUNT(*) FROM `config` WHERE `site_id` = '{$site_id}' AND `auth_id` = '{$auth_id}'";
             $count = $mysql->query($sql_count, '1');
             if (isset($count) && $count) {
@@ -127,7 +139,7 @@ class Bootstrap {
             $qq_config['qq_send_weibo_message'] = $_POST['qq_send_weibo_message'];
             $qq_config['qq_debug'] = $_POST['qq_debug'];
 
-            $content = json_encode($qq_config);
+            $content = json_encode($qq_config, JSON_UNESCAPED_UNICODE);
             $sql_count = "SELECT COUNT(*) FROM `config` WHERE `site_id` = '{$site_id}' AND `auth_id` = '{$auth_id}'";
             $count = $mysql->query($sql_count, '1');
             if (isset($count) && $count) {
@@ -142,13 +154,13 @@ class Bootstrap {
             $weibo_config['weibo_wifi_expired_time'] = $_POST['weibo_wifi_expired_time'];
             $weibo_config['weibo_default_url'] = $_POST['weibo_default_url'];
             $weibo_config['weibo_app_id'] = $_POST['weibo_app_id'];
-            $weibo_config['weibo_app_key'] = $_POST['weibo_app_key '];
+            $weibo_config['weibo_app_key'] = $_POST['weibo_app_key'];
             $weibo_config['weibo_callback_url'] = $_POST['weibo_callback_url'];
             $weibo_config['weibo_add_idol_by_name'] = $_POST['weibo_add_idol_by_name'];
             $weibo_config['weibo_send_weibo_message'] = $_POST['weibo_send_weibo_message'];
             $weibo_config['weibo_debug'] = $_POST['weibo_debug'];
 
-            $content = json_encode($weibo_config);
+            $content = json_encode($weibo_config, JSON_UNESCAPED_UNICODE);
             $sql_count = "SELECT COUNT(*) FROM `config` WHERE `site_id` = '{$site_id}' AND `auth_id` = '{$auth_id}'";
             $count = $mysql->query($sql_count, '1');
             if (isset($count) && $count) {
@@ -172,7 +184,7 @@ class Bootstrap {
             $weixin_config['weixin_auth_message'] = $_POST['weixin_auth_message'];
             $weixin_config['weixin_welcome_message'] = $_POST['weixin_welcome_message'];
 
-            $content = json_encode($weixin_config);
+            $content = json_encode($weixin_config, JSON_UNESCAPED_UNICODE);
             $sql_count = "SELECT COUNT(*) FROM `config` WHERE `site_id` = '{$site_id}' AND `auth_id` = '{$auth_id}'";
             $count = $mysql->query($sql_count, '1');
             if (isset($count) && $count) {
