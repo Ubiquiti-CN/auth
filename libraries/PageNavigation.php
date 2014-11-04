@@ -23,7 +23,7 @@ class PageNavigation {
             $html .= "<li><a href='{$current_url}?page={$previous_page}'>&laquo;</a></li>";
         }
 
-        if ($total_page <= $this->$numberOfItems) {
+        if ($total_page <= $this->numberOfItems) {
             for ($i=1; $i<=$total_page; $i++) {
                 if ($i == $page) {
                     $html .= "<li class='disabled'><a>{$page}</a></li>";
@@ -48,7 +48,7 @@ class PageNavigation {
 			<li class='disabled'><a>...</a></li>
 HTML;
         } else if (($total_page - $page) >= 4 && $page <= 3) {
-            for ($i=1; $i<=$this->$numberOfItems; $i++) {
+            for ($i=1; $i<=$this->numberOfItems; $i++) {
                 if ($page == $i) {
                     $html .= "<li class='active'><a>{$page}</a></li>";
                 } else {
