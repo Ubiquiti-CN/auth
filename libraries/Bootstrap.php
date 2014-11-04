@@ -81,7 +81,7 @@ class Bootstrap {
 
 
     private static function get_site_list() {
-        global $mysql;
+        $mysql = DB::get_instance();
 
         $sql = "SELECT * FROM `site` ORDER BY `id`";
         $result = $mysql->query($sql, 'all');
