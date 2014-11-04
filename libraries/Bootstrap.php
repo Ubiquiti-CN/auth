@@ -90,8 +90,9 @@ class Bootstrap {
     private static function get_site_list($page) {
         $mysql = DB::get_instance();
 
-        $offset = $page - 1;
-        $limit = self::$itemPerPage;
+        $itemPerPage = self::$itemPerPage;
+        $offset = ($page - 1) * $itemPerPage;
+        $limit = $page * $itemPerPage;
 
         $sql = "SELECT * FROM `site` ORDER BY `id` LIMIT {$offset}, {$limit}";
         $result = $mysql->query($sql, 'all');
