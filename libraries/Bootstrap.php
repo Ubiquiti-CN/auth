@@ -92,9 +92,8 @@ class Bootstrap {
 
         $itemPerPage = self::$itemPerPage;
         $offset = ($page - 1) * $itemPerPage;
-        $limit = $page * $itemPerPage;
 
-        $sql = "SELECT * FROM `site` ORDER BY `id` LIMIT {$offset}, {$limit}";
+        $sql = "SELECT * FROM `site` ORDER BY `id` LIMIT {$offset}, {$itemPerPage}";
         $result = $mysql->query($sql, 'all');
         if ($result && count($result)) {
             return $result;
