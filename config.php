@@ -30,6 +30,7 @@ include_once (LIBRARIES_PATH . '/Bootstrap' . PHP_EXT);
 include_once (LIBRARIES_PATH . '/DB' . PHP_EXT);
 include_once (LIBRARIES_PATH . '/UniFi' . PHP_EXT);
 include_once (LIBRARIES_PATH . '/Uri' . PHP_EXT);
+include_once (LIBRARIES_PATH . '/PageNavigation' . PHP_EXT);
 //-----------------------------------系统配置（不要修改）-----------------------------------------
 
 //-----------------------------------前端配置---------------------------------------------------

@@ -18,13 +18,9 @@
         </tr>
         </tbody>
     </table>
-    <ul class="pagination">
-        <li><a href="#" class="disabled">&laquo;</a></li>
-        <li><a href="#" class="active">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-    </ul>
+    <?php
+    $pageNav = new PageNavigation();
+    echo $pageNav->pager($page, $total_page);
+    ?>
+
 </div>

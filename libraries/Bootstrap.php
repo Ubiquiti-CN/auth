@@ -1,6 +1,7 @@
 <?php
 
 class Bootstrap {
+    static $itemPerPage = '5';
 
     private function __construct() {}
 
@@ -57,7 +58,13 @@ class Bootstrap {
                 break;
             case "manage_site":
                 if ($template['func'] == 'list') {
-                    $result['sites'] = self::get_site_list();
+                    $page = (Uri::call('page')) ? Uri::call('page') : 1;
+                    $count = self::get_site_count();
+                    $total_page = ceil($count / self::$itemPerPage);
+                    ($page > $total_page) ? $page = $total_page : '';
+                    $result['page'] = $page;
+                    $result['total_page'] = $total_page;
+                    $result['sites'] = self::get_site_list($page);
                 } else if ($template['func'] == 'detail') {
                     $result['site_id'] = Uri::call('id');
                     $result['details'] = self::get_site_detail($result['site_id']);
@@ -80,16 +87,32 @@ class Bootstrap {
     }
 
 
-    private static function get_site_list() {
+    private static function get_site_list($page) {
         $mysql = DB::get_instance();
 
-        $sql = "SELECT * FROM `site` ORDER BY `id`";
+        $offset = $page - 1;
+        $limit = self::$itemPerPage;
+
+        $sql = "SELECT * FROM `site` ORDER BY `id` LIMIT {$offset}, {$limit}";
         $result = $mysql->query($sql, 'all');
         if ($result && count($result)) {
             return $result;
         } else {
             return array();
         }
+    }
+
+    private static function get_site_count() {
+        $mysql = DB::get_instance();
+
+        $sql = "SELECT COUNT(*) as `count` FROM `site` ORDER BY `id`";
+        $result = $mysql->query($sql, '1');
+        if ($result) {
+            return $result;
+        } else {
+            return 0;
+        }
+
     }
 
     private static function get_site_detail($site_id) {
