@@ -21,6 +21,7 @@ UniFi 微信、微博和验证码授权上网代码
 
 ###代码配置
 1.配置config/_global.php文件
+
     /* UniFi 配置 */
     define('UNIFI_SERVER', 'https://1.1.1.1:8443');
     define('UNIFI_USER', 'username');
