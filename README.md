@@ -1,93 +1,23 @@
-UniFi 微信、微博、QQ和验证码授权上网代码
-===========
+## Laravel PHP Framework
 
-###测试通过的controller版本
-    v.3.2.1
-    v.3.2.5
+[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
+[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
+[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
+[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
 
-###微信配置和Controller配置
-请参照[优倍快技术论坛](http://bbs.ubnt.com.cn/forum.php?mod=viewthread&tid=9914&page=1)
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
 
-###微博配置和Controller配置
-请参照[优倍快技术论坛](http://bbs.ubnt.com.cn/forum.php?mod=viewthread&tid=9510)
+Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
 
-###服务器配置（本教程针对Linux服务器）
-1.需要一台有公网固定ip的服务器
+## Official Documentation
 
-2.搭建LNMP（Linux+Nginx+MySQL+PHP）环境，可参照[lnmp](http://lnmp.org/install.html)
+Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
 
-+ PHP需安装curl插件
+## Contributing
 
-3.下载代码
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
 
-+ 方法一：直接下载[代码](https://github.com/Ubiquiti-cn/auth/archive/master.zip)，重命名为guest，放到/home/wwwroot/目录下
-+ 方法二：git clone https://github.com/Ubiquiti-cn/auth.git /home/wwwroot/guest
+### License
 
-###代码配置
-1.配置config/global.php文件
-
-    //-----------------------------------UniFi----------------------------------------------------
-    define('UNIFI_SERVER', 'https://x.x.x.x:8443');
-    define('UNIFI_USER', 'username');
-    define('UNIFI_PASSWORD', 'password');
-    //-----------------------------------UniFi----------------------------------------------------
-
-    //-----------------------------------MySQL----------------------------------------------------
-    define('DB_HOST', 'localhost');//数据库HOST
-    define('DB_USERNAME', 'username');//数据库用户名
-    define('DB_PASSWORD', 'password');//数据库密码
-    define('DB_DBNAME', 'unifi');//数据库库名
-    define('DB_PORT', '3306');//数据库端口
-    //-----------------------------------MySQL----------------------------------------------------
-
-2.新建名为unifi的数据库，并在unifi下创建表
-
-    create database `unifi`;
-
-    CREATE TABLE `weixinTest` (
-       `id` int(11) NOT NULL AUTO_INCREMENT,
-       `Mac_ID` varchar(20) NOT NULL,
-       `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-       `fromUserName` varchar(255) NOT NULL,
-       PRIMARY KEY (`id`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-    CREATE TABLE `verify_code` (
-     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-     `Mac_ID` varchar(20) CHARACTER SET utf8 NOT NULL,
-     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     PRIMARY KEY (`id`)
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-    create table `auth_type` (
-     `id` int unsigned PRIMARY KEY auto_increment,
-     `auth_name` varchar(50) not null DEFAULT ''
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-    --
-    -- Dumping data for table `auth_type`
-    --
-
-    INSERT INTO `auth_type` (`id`, `auth_name`) VALUES
-    (1, 'verifyCode'),
-    (2, 'weibo '),
-    (3, 'weixin'),
-    (4, 'qq');
-
-    CREATE TABLE `site` (
-      `id` int(10) unsigned NOT NULL,
-      `auth_id` varchar(200) NOT NULL DEFAULT '',
-      `site_name` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
-      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-    CREATE TABLE `config` (
-     `id` INT unsigned PRIMARY KEY auto_increment,
-     `site_id` INT unsigned NOT NULL DEFAULT 0,
-     `auth_id` INT unsigned NOT NULL DEFAULT 0,
-     `content` text not NULL DEFAULT ''
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-###常见问题
-1.如一直授权失败，可能是tmp/unifi_cookie文件没有权限。可以改成777再试一下
+The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
