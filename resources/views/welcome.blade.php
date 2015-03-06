@@ -46,3 +46,4 @@
 		</div>
 	</body>
 </html>
+<script src="//localhost:35729/livereload.js"></script>
