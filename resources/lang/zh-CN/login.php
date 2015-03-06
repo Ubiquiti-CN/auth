@@ -11,5 +11,7 @@ return [
     'email' => '邮箱',
     'password' => '密码',
     'login' => '登陆',
-    'register' => '注册'
+    'register' => '注册',
+    'wrongipnut' => '您输入的内容有些问题。',
+    'whoop' => '呀!'
 ];
