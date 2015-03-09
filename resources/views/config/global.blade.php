@@ -4,7 +4,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
-			<form method="post" action="">
+			{!! Form::open() !!}
 				<h3>数据库</h3>
 				<div class="form-group">
 					<label for="dbHost">服务器地址</label>
@@ -37,17 +37,15 @@
 				</div>
 				<div class="form-group">
 					<label for="controllerVersion">版本</label>
-					<select value="<?php if (is_array($config) && count($config) > 0) echo $config['controllerVersion']; ?>" class="form-control" name="controllerVersion">
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-						<option value="4">4</option>
-						<option value="5">5</option>
-					</select>
+					@if (is_array($config) && count($config) > 0) 
+						{!! Form::select('controllerVersion', array(0=>'1.1', 1=>'2.1'), $config['controllerVersion'], array('class'=>'form-control')) !!}
+					@else
+						{!! Form::select('controllerVersion', array(0=>'1.1', 1=>'2.1'), '', array('class'=>'form-control')) !!}
+					@endif
 				</div>
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 				<button type="submit" class="btn btn-default">提交</button>
-			</form>
+			{!! Form::close() !!}
 		</div>
 	</div>
 </div>

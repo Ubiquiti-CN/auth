@@ -12,11 +12,12 @@ trait ValidatesRequests {
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @param  array  $rules
+	 * @param  array  $messages
 	 * @return void
 	 */
-	public function validate(Request $request, array $rules)
+	public function validate(Request $request, array $rules, array $messages = array())
 	{
-		$validator = $this->getValidationFactory()->make($request->all(), $rules);
+		$validator = $this->getValidationFactory()->make($request->all(), $rules, $messages);
 
 		if ($validator->fails())
 		{
@@ -53,8 +54,8 @@ trait ValidatesRequests {
 		}
 
 		return redirect()->to($this->getRedirectUrl())
-                        ->withInput($request->input())
-                        ->withErrors($errors);
+						->withInput($request->input())
+						->withErrors($errors, $this->errorBag());
 	}
 
 	/**
@@ -86,6 +87,16 @@ trait ValidatesRequests {
 	protected function getValidationFactory()
 	{
 		return app('Illuminate\Contracts\Validation\Factory');
+	}
+
+	/**
+	 * Get the key to be used for the view error bag.
+	 *
+	 * @return string
+	 */
+	protected function errorBag()
+	{
+		return 'default';
 	}
 
 }
