@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\GlobalConfig;
-use Auth;;
+use Auth;
 
 class GlobalController extends Controller {
 
@@ -50,6 +50,12 @@ class GlobalController extends Controller {
 
 
 		$input = $request->all();
+
+		$this->validate($request, [
+	        'dbHost' => 'required',
+	        'dbPort' => 'required',
+	    ]);
+
 		$config = new GlobalConfig();
 
 		$config::where('user_id', '=', $user_id)->delete();
