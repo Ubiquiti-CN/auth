@@ -5,6 +5,8 @@
  * Time: 上午10:52
  */
 
+use Config;
+
 class UniFiControllerApiFactory {
 
     private function __construct() {}
@@ -51,8 +53,9 @@ abstract class UniFiControllerApi {
         curl_setopt($ch, CURLOPT_URL, $server . "/login");
         curl_setopt($ch, CURLOPT_POSTFIELDS,
             "login=login&username=" . $user . "&password=" . $password);
-        curl_exec($ch);
+        $result = curl_exec($ch);
         curl_close($ch);
+	return $result;
     }
 
     public function logout($server) {
