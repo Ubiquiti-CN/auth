@@ -26,7 +26,7 @@ class ConfigController extends Controller {
         $model = new GlobalConfig();
         $config = $model::where('user_id', '=', $user_id)->first();
         $global_config = is_object($config) ? json_decode($config->data, true) : array();
-        // echo "<pre>";print_r($global_config);
+        //echo "<pre>";print_r($global_config);
         // todo judge global config
         $unifi_version = $global_config['controllerVersion'];
         $unifi_host = $global_config['controllerHost'];
@@ -35,7 +35,7 @@ class ConfigController extends Controller {
 
         $api_factory = UniFiControllerApiFactory::get_instance($unifi_version);
         $sites = $api_factory->get_all_sites($unifi_host, $unifi_user, $unifi_password);
-        // print_r($sites);exit;
+        //print_r($sites);exit;
         return view('site/list', ['sites' => $sites]);
 	}
 
@@ -76,16 +76,16 @@ class ConfigController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  string  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($site_id)
 	{
         $user = Auth::user();
         $user_id = $user->id;
 
         $model = new SiteConfig();
-        $config = $model::where('user_id', '=', $user_id)->where('site', '=', $id)->first();
+        $config = $model::where('user_id', '=', $user_id)->where('site', '=', $site_id)->first();
 
         $site_config = is_object($config) ? json_decode($config->data, true) : array();
 
