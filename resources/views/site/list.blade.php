@@ -16,7 +16,7 @@
 			{!! Form::open() !!}
 				<h3>数据库</h3>
 				<div class="form-group">
-					<label for="dbHost">服务器地址</label>
+					<label for="dbHost">服务器地址<?php echo "<pre>";print_r($sites); ?></label>
 					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['dbHost']; ?>" type="text" class="form-control" id="dbHost" name="dbHost" placeholder="127.0.0.1">
 				</div>
 				<div class="form-group">

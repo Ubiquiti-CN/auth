@@ -32,7 +32,7 @@ class ConfigController extends Controller {
 
         $api_factory = UniFiControllerApiFactory::get_instance($unifi_version);
         $sites = $api_factory->get_all_sites($unifi_host, $unifi_user, $unifi_password);
-echo "<pre>";print_r($sites);exit;
+
         return view('site/list', ['sites' => $sites]);
 	}
 
