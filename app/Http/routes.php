@@ -15,8 +15,14 @@ Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('config/global', 'Config\GlobalController@index');
-Route::post('config/global', 'Config\GlobalController@create');
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('config/global', 'Config\GlobalController@index');
+    Route::post('config/global', 'Config\GlobalController@create');
+
+    Route::get('site/list', 'Site\ConfigController@index');
+    Route::get('site/detail', 'Site\ConfigController@show');
+    Route::post('site/detail', 'Site\ConfigController@create');
+});
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
