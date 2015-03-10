@@ -6,5 +6,5 @@
  */
 
 return [
-    'cookie_file_path' => '',
+    'cookie_file_path' => storage_path().'/framework/tmp/unifi_cookie_file',
 ];
