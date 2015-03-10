@@ -7,6 +7,7 @@ use App\Models\SiteConfig;
 use Illuminate\Http\Request;
 
 use App\Libraries\UniFiControllerApiFactory;
+use App\Http\Controllers\Config\GlobalController;
 use Auth;
 
 class ConfigController extends Controller {
