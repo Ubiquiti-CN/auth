@@ -46,10 +46,10 @@
 				</div>
 				<div class="form-group">
 					<label for="controllerVersion">版本</label>
-					@if (is_array($config) && count($config) > 0) 
-						{!! Form::select('controllerVersion', array('3.2.1'=>'3.2.1', '3.2.5'=>'3.2.5', '3.2.7'=>'3.2.7', '3.2.10'=>'3.2.10'), $config['controllerVersion'], array('class'=>'form-control')) !!}
+					@if (is_array($config) && count($config) > 0)
+						{!! Form::select('controllerVersion', array(0=>'1.1', 1=>'2.1'), $config['controllerVersion'], array('class'=>'form-control')) !!}
 					@else
-						{!! Form::select('controllerVersion', array('3.2.1'=>'3.2.1', '3.2.5'=>'3.2.5', '3.2.7'=>'3.2.7', '3.2.10'=>'3.2.10'), '', array('class'=>'form-control')) !!}
+						{!! Form::select('controllerVersion', array(0=>'1.1', 1=>'2.1'), '', array('class'=>'form-control')) !!}
 					@endif
 				</div>
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />

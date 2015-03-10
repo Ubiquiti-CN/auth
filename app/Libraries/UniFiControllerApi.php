@@ -151,13 +151,17 @@ abstract class UniFiControllerApi {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         // Make the API Call
         curl_setopt($ch, CURLOPT_URL, $server . '/api/s/default/cmd/sitemgr');
         curl_setopt($ch, CURLOPT_POSTFIELDS, 'json=' . $data);
-        curl_exec($ch);
+        $result = curl_exec($ch);
         curl_close($ch);
 
         $this->logout($server);
+
+        $result = json_decode($result, TRUE);
+        return $result['data'];
     }
 
 }
