@@ -42,7 +42,12 @@
 				</div>
 				<div class="form-group">
 					<label for="waitPic">广告图片</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['waitPic']; ?>" type="file" class="" id="waitPic" name="waitPic" placeholder="www.baidu.com">
+					@if (is_array($config) && count($config) > 0)
+					<div>
+						<img src="/images/sites/{{ $config['waitPic'] }}" alt="" max-width="100">
+					</div>
+					@endif
+					<input type="file" class="" id="waitPic" name="waitPic" placeholder="">
 				</div>
 				@include('site.authType.'.$auth_type)
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
