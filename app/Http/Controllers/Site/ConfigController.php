@@ -66,7 +66,7 @@ class ConfigController extends Controller {
         $config = new SiteConfig();
 
         $config::where('user_id', '=', $user_id)->where('site', '=', $site_id)->delete();
-        
+
         $config->data = json_encode($input);
         $config->user_id = $user_id;
         $config->site = $site_id;
