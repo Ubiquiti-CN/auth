@@ -18,16 +18,16 @@
 				{!! Form::select(
 						'controllerVersion', 
 						array(
-							'/site/detail/'.$site_id.'/nopassword'=>'无需密码', 
-							'/site/detail/'.$site_id.'/password'=>'密码', 
-							'/site/detail/'.$site_id.'/sms'=>'短信'), 
-							'/site/detail/'.$site_id.'/'.$auth_type, 
+							'/site/detail/'.$site_id.'?auth_type=nopassword'=>'无需密码',
+							'/site/detail/'.$site_id.'?auth_type=password'=>'密码',
+							'/site/detail/'.$site_id.'?auth_type=sms'=>'短信'),
+							'/site/detail/'.$site_id.'?auth_type='.$auth_type,
 							array('onchange'=>'window.location=this.value'
 							)
 						) 
 				!!}
 			</div>
-			{!! Form::open() !!}
+			{!! Form::open(array('enctype' => 'multipart/form-data', 'url' => '/site/detail/')) !!}
 				<div class="form-group">
 					<label for="authTime">授权时间(秒)</label>
 					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['authTime']; ?>" type="text" class="form-control" id="authTime" name="authTime" placeholder="3000">
@@ -46,7 +46,9 @@
 				</div>
 				@include('site.authType.'.$auth_type)
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
-				<button type="submit" class="btn btn-default">提交</button>
+                <input type="hidden" name="auth_type" value="{{ $auth_type }}" />
+                <input type="hidden" name="site_id" value="{{ $site_id }}" />
+                <button type="submit" class="btn btn-default">提交</button>
 			{!! Form::close() !!}
 		</div>
 	</div>
