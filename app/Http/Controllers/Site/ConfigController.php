@@ -79,7 +79,7 @@ class ConfigController extends Controller {
 	 * @param  string  $id
 	 * @return Response
 	 */
-	public function show($site_id)
+	public function show($site_id, $auth_type = null)
 	{
         $user = Auth::user();
         $user_id = $user->id;
@@ -89,7 +89,9 @@ class ConfigController extends Controller {
 
         $site_config = is_object($config) ? json_decode($config->data, true) : array();
 
-        return view('site/detail', ['config' => $site_config]);
+        $auth_type = $auth_type ? $auth_type : (isset($site_config['auth_type']) ? $site_config['auth_type'] : 'nopassword');
+
+        return view('site/detail', ['config' => $site_config, 'site_id' => $site_id, 'auth_type' => $auth_type]);
 	}
 
 	/**

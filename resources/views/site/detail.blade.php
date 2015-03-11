@@ -13,45 +13,38 @@
 					</ul>
 				</div>
 			@endif
+			<div class="form-group">
+				<label for="authType">授权类型 </label>
+				{!! Form::select(
+						'controllerVersion', 
+						array(
+							'/site/detail/'.$site_id.'/nopassword'=>'无需密码', 
+							'/site/detail/'.$site_id.'/password'=>'密码', 
+							'/site/detail/'.$site_id.'/sms'=>'短信'), 
+							'/site/detail/'.$site_id.'/'.$auth_type, 
+							array('onchange'=>'window.location=this.value'
+							)
+						) 
+				!!}
+			</div>
 			{!! Form::open() !!}
-				<h3>数据库</h3>
 				<div class="form-group">
-					<label for="dbHost">服务器地址</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['dbHost']; ?>" type="text" class="form-control" id="dbHost" name="dbHost" placeholder="127.0.0.1">
+					<label for="authTime">授权时间(秒)</label>
+					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['authTime']; ?>" type="text" class="form-control" id="authTime" name="authTime" placeholder="3000">
 				</div>
 				<div class="form-group">
-					<label for="dbPort">端口</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['dbPort']; ?>" type="text" class="form-control" id="dbPort" name="dbPort" placeholder="3306">
+					<label for="redirectUrl">跳转页面</label>
+					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['redirectUrl']; ?>" type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="www.baidu.com">
 				</div>
 				<div class="form-group">
-					<label for="dbUsername">用户名</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['dbUsername']; ?>" type="text" class="form-control" id="dbUsername" name="dbUsername" placeholder="root">
+					<label for="waitTime">广告等待时间(秒)</label>
+					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['waitTime']; ?>" type="text" class="form-control" id="waitTime" name="waitTime" placeholder="5">
 				</div>
 				<div class="form-group">
-					<label for="dbPassword">密码</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['dbPassword']; ?>" type="text" class="form-control" id="dbPassword" name="dbPassword" placeholder="">
+					<label for="waitPic">广告图片</label>
+					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['waitPic']; ?>" type="file" class="" id="waitPic" name="waitPic" placeholder="www.baidu.com">
 				</div>
-				<h3>Controller</h3>
-				<div class="form-group">
-					<label for="controllerHost">服务器地址</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['controllerHost']; ?>" type="text" class="form-control" id="controllerHost" name="controllerHost" placeholder="https://127.0.0.1:8443">
-				</div>
-				<div class="form-group">
-					<label for="controllerUsername">用户名</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['controllerUsername']; ?>" type="text" class="form-control" id="controllerUsername" name="controllerUsername" placeholder="ubnt">
-				</div>
-				<div class="form-group">
-					<label for="controllerPassword">密码</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['controllerPassword']; ?>" type="text" class="form-control" id="controllerPassword" name="controllerPassword" placeholder="">
-				</div>
-				<div class="form-group">
-					<label for="controllerVersion">版本</label>
-					@if (is_array($config) && count($config) > 0)
-						{!! Form::select('controllerVersion', array(0=>'1.1', 1=>'2.1'), $config['controllerVersion'], array('class'=>'form-control')) !!}
-					@else
-						{!! Form::select('controllerVersion', array(0=>'1.1', 1=>'2.1'), '', array('class'=>'form-control')) !!}
-					@endif
-				</div>
+				@include('site.authType.'.$auth_type)
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 				<button type="submit" class="btn btn-default">提交</button>
 			{!! Form::close() !!}
