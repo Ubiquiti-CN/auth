@@ -2,3 +2,4 @@
 .idea
 config/database.php
 storage/framework/tmp/unifi_cookie_file
+public/images/sites/wait*

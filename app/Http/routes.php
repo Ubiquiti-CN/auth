@@ -20,7 +20,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('config/global', 'Config\GlobalController@create');
 
     Route::get('site/list', 'Site\ConfigController@index');
-    Route::get('site/detail/{site_id}/{auth_type?}', 'Site\ConfigController@show');
+    Route::get('site/detail/{site_id}', 'Site\ConfigController@show');
     Route::post('site/detail', 'Site\ConfigController@create');
 });
 

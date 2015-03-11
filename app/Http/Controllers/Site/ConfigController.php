@@ -10,6 +10,7 @@ use App\Libraries\UniFiControllerApiFactory;
 use App\Models\GlobalConfig;
 use Auth;
 
+
 class ConfigController extends Controller {
 
 	/**
@@ -46,21 +47,32 @@ class ConfigController extends Controller {
 	 */
 	public function create(Request $request)
 	{
+
         $user = Auth::user();
         $user_id = $user->id;
 
         $input = $request->all();
-        $site = '';
+        $site_id = $input['site_id'];
+
+        if ($request->hasFile('waitPic')) {
+            $destination_path = public_path() . '/images/sites/';
+            // todo get file ext
+            //$ext = $request->file('waitPic')->getExtension();
+            $file_name = 'wait_' . md5($user_id . $site_id) . '.jpg';
+            $request->file('waitPic')->move($destination_path, $file_name);
+            $input['waitPic'] = $file_name;
+        }
 
         $config = new SiteConfig();
 
-        $config::where('user_id', '=', $user_id)->where('site', '=', $site)->delete();
+        $config::where('user_id', '=', $user_id)->where('site', '=', $site_id)->delete();
 
         $config->data = json_encode($input);
         $config->user_id = $user_id;
-        $config->site = $site;
+        $config->site = $site_id;
         $config->save();
-        return redirect('site/detail');//site参数
+
+        return redirect('site/detail/' . $site_id);//site参数
 	}
 
 	/**
@@ -79,8 +91,10 @@ class ConfigController extends Controller {
 	 * @param  string  $id
 	 * @return Response
 	 */
-	public function show($site_id, $auth_type = null)
+	public function show($site_id, Request $request)
 	{
+        $auth_type = $request->input('auth_type');
+
         $user = Auth::user();
         $user_id = $user->id;
 
