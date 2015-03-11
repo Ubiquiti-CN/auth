@@ -1,11 +1,8 @@
-<html>
-	<head>
-		<title>Laravel</title>
-		
-		<link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+@extends('app')
+@section('content')
 
 		<style>
-			body {
+			.homeTable {
 				margin: 0;
 				padding: 0;
 				width: 100%;
@@ -15,14 +12,14 @@
 				font-weight: 100;
 				font-family: 'Lato';
 			}
-
-			.container {
+			.homeContainer {
 				text-align: center;
 				display: table-cell;
 				vertical-align: middle;
+				font-family: 'Lato';
 			}
 
-			.content {
+			.homeContent {
 				text-align: center;
 				display: inline-block;
 			}
@@ -36,13 +33,13 @@
 				font-size: 24px;
 			}
 		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="content">
-				<div class="title">Laravel 5</div>
-				<div class="quote">{{ Inspiring::quote() }}</div>
+		<div class="homeTable">
+			<div class="homeContainer">
+				<div class="homeContent">
+					<div class="title">ubnt</div>
+					<div class="quote">{{ Inspiring::quote() }}</div>
+				</div>
 			</div>
 		</div>
-	</body>
-</html>
+@endsection
+
