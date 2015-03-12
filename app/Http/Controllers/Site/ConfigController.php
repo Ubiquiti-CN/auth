@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Libraries\UniFiControllerApiException;
 use App\Models\SiteConfig;
 use Illuminate\Http\Request;
 
@@ -28,16 +29,20 @@ class ConfigController extends Controller {
         $model = new GlobalConfig();
         $config = $model::where('user_id', '=', $user_id)->first();
         $global_config = is_object($config) ? json_decode($config->data, true) : array();
-        //echo "<pre>";print_r($global_config);
-        // todo judge global config
+
         $unifi_version = $global_config['controllerVersion'];
         $unifi_host = $global_config['controllerHost'];
         $unifi_user = $global_config['controllerUsername'];
         $unifi_password = $global_config['controllerPassword'];
 
         $api_factory = UniFiControllerApiFactory::get_instance($unifi_version);
-        $sites = $api_factory->get_all_sites($unifi_host, $unifi_user, $unifi_password);
-        //print_r($sites);exit;
+        try {
+            $sites = $api_factory->get_all_sites($unifi_host, $unifi_user, $unifi_password);
+        } catch (UniFiControllerApiException $exception) {
+            Notification::error('Controller连接失败，请检查Controller部分的配置！');
+            return redirect('config/global');
+        }
+
         return view('site/list', ['sites' => $sites]);
 	}
 
