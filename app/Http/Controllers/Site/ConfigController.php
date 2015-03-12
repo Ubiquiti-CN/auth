@@ -54,13 +54,25 @@ class ConfigController extends Controller {
         $input = $request->all();
         $site_id = $input['site_id'];
 
-        if ($request->hasFile('waitPic')) {
+        if (isset($input['waitPic'])) {
+            $this->validate($request, [
+                'waitPic' => 'image',
+            ]);
+
             $destination_path = public_path() . '/images/sites/';
-            // todo get file ext
-            //$ext = $request->file('waitPic')->getExtension();
-            $file_name = 'wait_' . md5($user_id . $site_id) . '.jpg';
+            $ext = $request->file('waitPic')->getClientOriginalExtension();
+            $file_name = 'wait_' . md5($user_id . $site_id) . '.' . $ext;
             $request->file('waitPic')->move($destination_path, $file_name);
+
+            $upload_status = $request->File('waitPic')->getError();
+            if ($upload_status !== UPLOAD_ERR_OK) {
+                echo $request->file('waitPic')->getErrorMessage();
+                exit;
+            }
             $input['waitPic'] = $file_name;
+        } else {
+            $input['waitPic'] = $input['_waitPic'];
+            unset($input['_waitPic']);
         }
 
         $config = new SiteConfig();
