@@ -37,7 +37,7 @@ return [
 	"email"                => "The :attribute must be a valid email address.",
 	"filled"               => "The :attribute field is required.",
 	"exists"               => "The selected :attribute is invalid.",
-	"image"                => "The :attribute must be an image.",
+	"image"                => ":attribute 必须是图片格式。",
 	"in"                   => "The selected :attribute is invalid.",
 	"integer"              => "The :attribute must be an integer.",
 	"ip"                   => "The :attribute must be a valid IP address.",
@@ -112,6 +112,10 @@ return [
         'controllerUsername' => '用户名（Controller）',
         'controllerPassword' => '密码（Controller）',
         'controllerVersion' => '版本（Controller）',
+        'waitPic' => '广告图片',
+        'waitTime' => '广告等待时间(秒)',
+        'redirectUrl' => '跳转页面',
+        'authTime' => '授权时间(秒)',
     ],
 
 ];

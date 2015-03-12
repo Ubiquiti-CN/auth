@@ -56,7 +56,7 @@ class ConfigController extends Controller {
 
         if (isset($input['waitPic'])) {
             $this->validate($request, [
-                'waitPic' => 'image',
+                'waitPic' => 'required|image',
             ]);
 
             $destination_path = public_path() . '/images/sites/';
