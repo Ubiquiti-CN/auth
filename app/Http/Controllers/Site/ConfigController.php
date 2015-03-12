@@ -62,7 +62,7 @@ class ConfigController extends Controller {
 
         if (isset($input['waitPic'])) {
             $this->validate($request, [
-                'waitPic' => 'required|image',
+                'waitPic' => 'required|image|max:2048',
             ]);
 
             $destination_path = public_path() . '/images/sites/';
@@ -71,17 +71,20 @@ class ConfigController extends Controller {
             $request->file('waitPic')->move($destination_path, $file_name);
 
             $upload_status = $request->File('waitPic')->getError();
+
             if ($upload_status !== UPLOAD_ERR_OK) {
-                echo $request->file('waitPic')->getErrorMessage();
-                exit;
+                $error_message = $request->file('waitPic')->getErrorMessage();
+                Notification::error($error_message);
+                return redirect('site/detail/' . $site_id);
             }
+
             $input['waitPic'] = $file_name;
         } else if (isset($input['_waitPic'])) {
             $input['waitPic'] = $input['_waitPic'];
             unset($input['_waitPic']);
         } else {
             $this->validate($request, [
-                'waitPic' => 'required|image',
+                'waitPic' => 'required|image|max:2048',
             ]);
         }
 
