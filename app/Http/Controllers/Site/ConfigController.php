@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Libraries\UniFiControllerApiFactory;
 use App\Models\GlobalConfig;
 use Auth;
+use Notification;
 
 
 class ConfigController extends Controller {
@@ -83,6 +84,8 @@ class ConfigController extends Controller {
         $config->user_id = $user_id;
         $config->site = $site_id;
         $config->save();
+
+        Notification::success('保存成功');
 
         return redirect('site/detail/' . $site_id);//site参数
 	}
