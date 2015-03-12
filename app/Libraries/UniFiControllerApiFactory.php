@@ -49,13 +49,15 @@ abstract class UniFiControllerApi {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         // Login to the UniFi controller
         curl_setopt($ch, CURLOPT_URL, $server . "/login");
         curl_setopt($ch, CURLOPT_POSTFIELDS,
             "login=login&username=" . $user . "&password=" . $password);
         $result = curl_exec($ch);
         curl_close($ch);
-	return $result;
+
+        return $result;
     }
 
     public function logout($server) {
@@ -70,6 +72,7 @@ abstract class UniFiControllerApi {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         // Make the API Call
         curl_setopt($ch, CURLOPT_URL, $server . '/logout');
         curl_exec($ch);
@@ -97,6 +100,7 @@ abstract class UniFiControllerApi {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         // Make the API Call
         curl_setopt($ch, CURLOPT_URL, $server . '/api/s/' . $site . '/cmd/stamgr');
         curl_setopt($ch, CURLOPT_POSTFIELDS, 'json=' . $data);
@@ -164,8 +168,17 @@ abstract class UniFiControllerApi {
         $this->logout($server);
 
         $result = json_decode($result, TRUE);
+
+        if ($result['meta']['rc'] == 'error') {
+            throw new UniFiControllerApiException();
+        }
+
         return $result['data'];
     }
+
+}
+
+class UniFiControllerApiException extends \Exception {
 
 }
 

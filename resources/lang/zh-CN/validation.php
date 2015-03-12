@@ -37,13 +37,13 @@ return [
 	"email"                => "The :attribute must be a valid email address.",
 	"filled"               => "The :attribute field is required.",
 	"exists"               => "The selected :attribute is invalid.",
-	"image"                => "The :attribute must be an image.",
+	"image"                => ":attribute 必须是图片格式。",
 	"in"                   => "The selected :attribute is invalid.",
 	"integer"              => "The :attribute must be an integer.",
 	"ip"                   => "The :attribute must be a valid IP address.",
 	"max"                  => [
 		"numeric" => "The :attribute may not be greater than :max.",
-		"file"    => "The :attribute may not be greater than :max kilobytes.",
+		"file"    => ":attribute 不能大于 :max KB.",
 		"string"  => "The :attribute may not be greater than :max characters.",
 		"array"   => "The :attribute may not have more than :max items.",
 	],
@@ -112,6 +112,10 @@ return [
         'controllerUsername' => '用户名（Controller）',
         'controllerPassword' => '密码（Controller）',
         'controllerVersion' => '版本（Controller）',
+        'waitPic' => '广告图片',
+        'waitTime' => '广告等待时间(秒)',
+        'redirectUrl' => '跳转页面',
+        'authTime' => '授权时间(秒)',
     ],
 
 ];
