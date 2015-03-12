@@ -42,11 +42,11 @@
 					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['waitTime']; ?>" type="text" class="form-control" id="waitTime" name="waitTime" placeholder="5">
 				</div>
 				<div class="form-group">
-					<label for="waitPic">广告图片</label>
+					<label for="waitPic">广告图片(不能大于1M)</label>
 					@if (is_array($config) && count($config) > 0)
-					<div>
+					<p>
 						<img src="/images/sites/{{ $config['waitPic'] }}" alt="" max-width="100">
-					</div>
+					</p>
 					@endif
 					<input type="file" class="" id="waitPic" name="waitPic" placeholder="">
 				</div>

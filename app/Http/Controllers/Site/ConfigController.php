@@ -62,7 +62,7 @@ class ConfigController extends Controller {
 
         if (isset($input['waitPic'])) {
             $this->validate($request, [
-                'waitPic' => 'required|image|max:2048',
+                'waitPic' => 'required|image|max:1024',
             ]);
 
             $destination_path = public_path() . '/images/sites/';
@@ -84,7 +84,7 @@ class ConfigController extends Controller {
             unset($input['_waitPic']);
         } else {
             $this->validate($request, [
-                'waitPic' => 'required|image|max:2048',
+                'waitPic' => 'required|image|max:1024',
             ]);
         }
 
