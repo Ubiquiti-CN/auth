@@ -71,9 +71,13 @@ class ConfigController extends Controller {
                 exit;
             }
             $input['waitPic'] = $file_name;
-        } else {
+        } else if (isset($input['_waitPic'])) {
             $input['waitPic'] = $input['_waitPic'];
             unset($input['_waitPic']);
+        } else {
+            $this->validate($request, [
+                'waitPic' => 'required|image',
+            ]);
         }
 
         $config = new SiteConfig();
