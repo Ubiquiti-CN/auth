@@ -146,6 +146,7 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		"Laracasts\Generators\GeneratorsServiceProvider",
+		'Krucas\Notification\NotificationServiceProvider',
 
 
 	],
@@ -197,6 +198,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form'=> 'Illuminate\Html\FormFacade',
 		'HTML'=> 'Illuminate\Html\HtmlFacade',
+		'Notification' => 'Krucas\Notification\Facades\Notification',
 
 	],
 
