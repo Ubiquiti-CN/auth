@@ -54,6 +54,9 @@
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
                 <input type="hidden" name="auth_type" value="{{ $auth_type }}" />
                 <input type="hidden" name="site_id" value="{{ $site_id }}" />
+                @if (isset($config['waitPic']) && $config['waitPic'])
+                    <input type="hidden" name="_waitPic" value="{{ $config['waitPic'] }}" />
+                @endif
                 <button type="submit" class="btn btn-default">提交</button>
 			{!! Form::close() !!}
 		</div>
