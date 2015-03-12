@@ -43,28 +43,36 @@ class GlobalController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create(Request $request)
-	{
-		$user = Auth::user();
-		$user_id = $user->id;
+    public function create(Request $request)
+    {
+        $user = Auth::user();
+        $user_id = $user->id;
 
+        $request->input('dbHost', '127.0.0.1');
+        $request->input('dbPort', '3306');
+        $input = $request->all();
+        $input['dbHost'] = (isset($input['dbHost']) && $input['dbHost']) ? $input['dbHost'] : '127.0.0.1';
+        $input['dbPort'] = (isset($input['dbPort']) && $input['dbPort']) ? $input['dbPort'] : '3306';
 
-		$input = $request->all();
+        $this->validate($request, [
+            'dbPort' => 'integer|between:1024,65535',
+            'dbUsername' => 'required',
+            'dbPassword' => 'required',
+            'dbName' => 'required',
+            'controllerHost' => 'required|url',
+            'controllerUsername' => 'required',
+            'controllerPassword' => 'required',
+            'controllerVersion' => 'required',
+        ]);
 
-		$this->validate($request, [
-	        'dbHost' => 'required',
-	        'dbPort' => 'required',
-	    ]);
+        $config = new GlobalConfig();
+        $config::where('user_id', '=', $user_id)->delete();
+        $config->data = json_encode($input);
+        $config->user_id = $user_id;
+        $config->save();
 
-		$config = new GlobalConfig();
-
-		$config::where('user_id', '=', $user_id)->delete();
-
-		$config->data = json_encode($input);
-		$config->user_id = $user_id;
-		$config->save();
-		return redirect('config/global');
-	}
+        return redirect('config/global');
+    }
 
 	/**
 	 * Store a newly created resource in storage.
