@@ -22,7 +22,7 @@ return [
 	"array"                => "The :attribute must be an array.",
 	"before"               => "The :attribute must be a date before :date.",
 	"between"              => [
-		"numeric" => "The :attribute must be between :min and :max.",
+		"numeric" => ":attribute 必须在 :min 和 :max 之间。",
 		"file"    => "The :attribute must be between :min and :max kilobytes.",
 		"string"  => "The :attribute must be between :min and :max characters.",
 		"array"   => "The :attribute must have between :min and :max items.",
@@ -71,7 +71,7 @@ return [
 		"array"   => "The :attribute must contain :size items.",
 	],
 	"unique"               => "The :attribute has already been taken.",
-	"url"                  => "The :attribute format is invalid.",
+	"url"                  => ":attribute 格式错误。",
 	"timezone"             => "The :attribute must be a valid zone.",
 
 	/*
@@ -107,6 +107,7 @@ return [
         'dbPort' => '端口（数据库）',
         'dbUsername' => '用户名（数据库）',
         'dbPassword' => '密码（数据库）',
+        'dbName' => '数据库名（数据库）',
         'controllerHost' => '服务器地址（Controller）',
         'controllerUsername' => '用户名（Controller）',
         'controllerPassword' => '密码（Controller）',
