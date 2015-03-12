@@ -4,6 +4,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
+			{!! Notification::showAll() !!}
 			@if (count($errors) > 0)
 				<div class="alert alert-danger">
 					<ul>

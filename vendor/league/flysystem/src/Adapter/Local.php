@@ -33,8 +33,8 @@ class Local extends AbstractAdapter
     {
         $realRoot = $this->ensureDirectory($root);
 
-        if (! is_writable($realRoot)) {
-            throw new \LogicException('The root path '.$root.' is not writable.');
+        if ( ! is_dir($realRoot) || ! is_readable($realRoot)) {
+            throw new \LogicException('The root path '.$root.' is not readable.');
         }
 
         $this->setPathPrefix($realRoot);
@@ -216,7 +216,7 @@ class Local extends AbstractAdapter
 
         foreach ($iterator as $file) {
             $path = $this->getFilePath($file);
-            if (preg_match('#(^|/)\.{1,2}$#', $path)) {
+            if (preg_match('#(^|/|\\\\)\.{1,2}$#', $path)) {
                 continue;
             }
             $result[] = $this->normalizeFileInfo($file);

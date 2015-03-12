@@ -198,7 +198,7 @@ class Util
     /**
      * Ensure a Config instance.
      *
-     * @param string|null|array|Config $config
+     * @param null|array|Config $config
      *
      * @return Config config instance
      *
@@ -212,11 +212,6 @@ class Util
 
         if ($config instanceof Config) {
             return $config;
-        }
-
-        // Backwards compatibility
-        if (is_string($config)) {
-            $config = ['visibility' => $config];
         }
 
         if (is_array($config)) {
@@ -233,9 +228,16 @@ class Util
      */
     public static function rewindStream($resource)
     {
-        if (ftell($resource) !== 0) {
+        if (ftell($resource) !== 0 && static::isSeekableStream($resource)) {
             rewind($resource);
         }
+    }
+
+    public static function isSeekableStream($resource)
+    {
+        $metadata = stream_get_meta_data($resource);
+
+        return $metadata['seekable'];
     }
 
     /**
@@ -271,7 +273,6 @@ class Util
 
         while (! empty($parent) && ! in_array($parent, $directories)) {
             $directories[] = $parent;
-
             $parent = static::dirname($parent);
         }
 
