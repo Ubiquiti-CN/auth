@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\GlobalConfig;
 use Auth;
+use Notification;
 
 class GlobalController extends Controller {
 
@@ -48,8 +49,6 @@ class GlobalController extends Controller {
         $user = Auth::user();
         $user_id = $user->id;
 
-        $request->input('dbHost', '127.0.0.1');
-        $request->input('dbPort', '3306');
         $input = $request->all();
         $input['dbHost'] = (isset($input['dbHost']) && $input['dbHost']) ? $input['dbHost'] : '127.0.0.1';
         $input['dbPort'] = (isset($input['dbPort']) && $input['dbPort']) ? $input['dbPort'] : '3306';
@@ -70,6 +69,8 @@ class GlobalController extends Controller {
         $config->data = json_encode($input);
         $config->user_id = $user_id;
         $config->save();
+
+        Notification::success('保存成功');
 
         return redirect('config/global');
     }
