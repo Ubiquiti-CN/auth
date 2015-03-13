@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\GlobalConfig;
 use Auth;
 use Notification;
+use Config;
 
 class GlobalController extends Controller {
 
@@ -45,8 +46,8 @@ class GlobalController extends Controller {
         $user_id = $user->id;
 
         $input = $request->all();
-        $input['dbHost'] = (isset($input['dbHost']) && $input['dbHost']) ? $input['dbHost'] : '127.0.0.1';
-        $input['dbPort'] = (isset($input['dbPort']) && $input['dbPort']) ? $input['dbPort'] : '3306';
+        $input['dbHost'] = (isset($input['dbHost']) && $input['dbHost']) ? $input['dbHost'] : Config::get('unifi.default_db_host');
+        $input['dbPort'] = (isset($input['dbPort']) && $input['dbPort']) ? $input['dbPort'] : Config::get('unifi.default_db_port');
 
         $this->validate($request, [
             'dbPort' => 'integer|between:1024,65535',

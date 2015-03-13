@@ -11,6 +11,7 @@ use App\Models\SiteConfig;
 use App\Models\NoPasswordLog;
 use Auth;
 use Notification;
+use Config;
 
 class AuthController extends Controller {
 
@@ -27,9 +28,10 @@ class AuthController extends Controller {
         $config = new SiteConfig();
         $config = $config::where('user_id', '=', $user_id)->where('site', '=', $site)->first();
         $site_config = is_object($config) ? json_decode($config->data, true) : array();
-        $expired_time = isset($site_config['authTime']) ? $site_config['authTime'] : 3000;
+        $expired_time = isset($site_config['authTime']) ? $site_config['authTime'] : Config::get('unifi.default_expired_time');
         if (!isset($site_config['auth_type'])) {
-
+            Notification::error('为定义授权类型！');
+            return redirect('site/list');
         }
 
         $model = new GlobalConfig();
@@ -47,7 +49,6 @@ class AuthController extends Controller {
         switch ($site_config['auth_type']) {
             case 'nopassword'://无需密码
                 $client_mac = isset($input['id']) ? $input['id'] : '';
-                $url = isset($input['url']) ? $input['url'] : 'http://www.ubnt.com.cn';
                 $log = new NoPasswordLog();
                 $log::where('user_id', '=', $user_id)->where('site', '=', $site)->where('client_mac', '=', $client_mac)->delete();
                 $log->client_mac = $client_mac;
@@ -61,6 +62,8 @@ class AuthController extends Controller {
             case 'password'://密码
                 break;
             case 'sms'://短信
+                break;
+            case 'test'://扫码
                 break;
             default:
                 break;

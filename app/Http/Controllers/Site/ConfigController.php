@@ -22,7 +22,6 @@ class ConfigController extends Controller {
 	 */
 	public function index()
 	{
-		// todo unifi api get all sites (different version)
         $user = Auth::user();
         $user_id = $user->id;
 
