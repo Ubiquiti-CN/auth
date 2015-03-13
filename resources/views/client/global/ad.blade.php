@@ -11,15 +11,6 @@
 	}
 </style>
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2 adImgContainer">
-			<p id="timeContiner">{{ $site_config['waitTime'] }}秒后连接网络</p>
-			<img class="adImg"  src="/images/sites/{{ $site_config['waitPic'] }}" onload="link()">
-		</div>
-	</div>
-</div>
-
 <script>
 	function link() {
 		var timeContiner = document.getElementById('timeContiner');
@@ -33,6 +24,15 @@
 		}, 1000);
 	}
 </script>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 adImgContainer">
+			<p id="timeContiner">{{ $site_config['waitTime'] }}秒后连接网络</p>
+			<img class="adImg"  src="/images/sites/{{ $site_config['waitPic'] }}" onload="link()">
+		</div>
+	</div>
+</div>
 	
 @endsection
 
