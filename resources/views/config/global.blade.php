@@ -57,7 +57,6 @@
 						{!! Form::select('controllerVersion', array('3.2.1'=>'3.2.1', '3.2.5'=>'3.2.5', '3.2.7'=>'3.2.7', '3.2.10'=>'3.2.10'), '', array('class'=>'form-control')) !!}
 					@endif
 				</div>
-				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 				<button type="submit" class="btn btn-default">提交</button>
 			{!! Form::close() !!}
 		</div>

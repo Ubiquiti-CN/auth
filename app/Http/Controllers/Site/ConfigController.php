@@ -60,6 +60,14 @@ class ConfigController extends Controller {
         $input = $request->all();
         $site_id = $input['site_id'];
 
+        $this->validate($request, [
+            'authTime' => 'required|integer',
+            'redirectUrl' => 'required|url',
+            'waitTime' => 'required|integer',
+            'auth_type' => 'required',
+            'site_id' => 'required',
+        ]);
+
         if (isset($input['waitPic'])) {
             $this->validate($request, [
                 'waitPic' => 'required|image|max:1024',
