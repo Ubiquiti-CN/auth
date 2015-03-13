@@ -49,11 +49,11 @@ class AuthController extends Controller {
                 $client_mac = isset($input['id']) ? $input['id'] : '';
                 $url = isset($input['url']) ? $input['url'] : 'http://www.ubnt.com.cn';
                 $log = new NoPasswordLog();
+                $log::where('user_id', '=', $user_id)->where('site', '=', $site)->where('client_mac', '=', $client_mac)->delete();
                 $log->client_mac = $client_mac;
                 $log->user_id = $user_id;
                 $log->site = $site;
                 $log->save();
-                // todo db select & insert
                 //$api_factory->authorize($unifi_host, $unifi_user, $unifi_password, $site, $client_mac, $expired_time);
                 echo "<pre>";var_dump($client_mac);
                 break;
