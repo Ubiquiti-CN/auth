@@ -32,10 +32,10 @@ class GlobalController extends Controller {
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * 
+	 *
 	 * DB: host, username, password, db port, db name
 	 * Controller: server address, uername, password, version
-	 * 
+	 *
 	 *
 	 * @return Response
 	 */
@@ -51,7 +51,6 @@ class GlobalController extends Controller {
         $this->validate($request, [
             'dbPort' => 'integer|between:1024,65535',
             'dbUsername' => 'required',
-            'dbPassword' => 'required',
             'dbName' => 'required',
             'controllerHost' => 'required|url',
             'controllerUsername' => 'required',
