@@ -15,27 +15,6 @@
 				</div>
 			@endif
 			{!! Form::open() !!}
-				<h3>数据库</h3>
-				<div class="form-group">
-					<label for="dbHost">服务器地址</label>
-					<input value="<?php if (is_array($config) && count($config) > 0 && isset($config['dbHost'])) echo $config['dbHost']; ?>" type="text" class="form-control" id="dbHost" name="dbHost" placeholder="127.0.0.1">
-				</div>
-				<div class="form-group">
-					<label for="dbPort">端口</label>
-					<input value="<?php if (is_array($config) && count($config) > 0 && isset($config['dbPort'])) echo $config['dbPort']; ?>" type="text" class="form-control" id="dbPort" name="dbPort" placeholder="3306">
-				</div>
-				<div class="form-group">
-					<label for="dbUsername">用户名</label>
-					<input value="<?php if (is_array($config) && count($config) > 0 && isset($config['dbUsername'])) echo $config['dbUsername']; ?>" type="text" class="form-control" id="dbUsername" name="dbUsername" placeholder="root">
-				</div>
-				<div class="form-group">
-					<label for="dbPassword">密码</label>
-					<input value="<?php if (is_array($config) && count($config) > 0 && isset($config['dbPassword'])) echo $config['dbPassword']; ?>" type="text" class="form-control" id="dbPassword" name="dbPassword" placeholder="">
-				</div>
-                <div class="form-group">
-                    <label for="dbName">数据库名</label>
-                    <input value="<?php if (is_array($config) && count($config) > 0 && isset($config['dbName'])) echo $config['dbName']; ?>" type="text" class="form-control" id="dbName" name="dbName" placeholder="">
-                </div>
 				<h3>Controller</h3>
 				<div class="form-group">
 					<label for="controllerHost">服务器地址</label>

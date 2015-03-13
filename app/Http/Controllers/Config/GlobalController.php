@@ -46,13 +46,8 @@ class GlobalController extends Controller {
         $user_id = $user->id;
 
         $input = $request->all();
-        $input['dbHost'] = (isset($input['dbHost']) && $input['dbHost']) ? $input['dbHost'] : Config::get('unifi.default_db_host');
-        $input['dbPort'] = (isset($input['dbPort']) && $input['dbPort']) ? $input['dbPort'] : Config::get('unifi.default_db_port');
 
         $this->validate($request, [
-            'dbPort' => 'integer|between:1024,65535',
-            'dbUsername' => 'required',
-            'dbName' => 'required',
             'controllerHost' => 'required|url',
             'controllerUsername' => 'required',
             'controllerPassword' => 'required',
