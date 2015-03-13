@@ -16,7 +16,6 @@ class CreateNoPasswordLogsTable extends Migration {
 		{
             $table->increments('id');
             $table->string('client_mac', 20);
-            $table->integer('user_id');
             $table->string('site', 200);
             $table->softDeletes();
             $table->timestamps();

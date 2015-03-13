@@ -22,11 +22,8 @@ class AuthController extends Controller {
 	 */
     public function index($site, Request $request)
     {
-        $user = Auth::user();
-        $user_id = $user->id;
-
         $config = new SiteConfig();
-        $config = $config::where('user_id', '=', $user_id)->where('site', '=', $site)->first();
+        $config = $config::where('site', '=', $site)->first();
         $site_config = is_object($config) ? json_decode($config->data, true) : array();
         $expired_time = isset($site_config['authTime']) ? $site_config['authTime'] : Config::get('unifi.default_expired_time');
         if (!isset($site_config['auth_type'])) {
@@ -35,7 +32,7 @@ class AuthController extends Controller {
         }
 
         $model = new GlobalConfig();
-        $config = $model::where('user_id', '=', $user_id)->first();
+        $config = $model->first();
         $global_config = is_object($config) ? json_decode($config->data, true) : array();
 
         $unifi_version = $global_config['controllerVersion'];
@@ -50,9 +47,8 @@ class AuthController extends Controller {
             case 'nopassword'://无需密码
                 $client_mac = isset($input['id']) ? $input['id'] : '';
                 $log = new NoPasswordLog();
-                $log::where('user_id', '=', $user_id)->where('site', '=', $site)->where('client_mac', '=', $client_mac)->delete();
+                $log::where('site', '=', $site)->where('client_mac', '=', $client_mac)->delete();
                 $log->client_mac = $client_mac;
-                $log->user_id = $user_id;
                 $log->site = $site;
                 $log->save();
                 $api_factory->authorize($unifi_host, $unifi_user, $unifi_password, $site, $client_mac, $expired_time);
