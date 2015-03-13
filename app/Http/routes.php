@@ -22,9 +22,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('site/list', 'Site\ConfigController@index');
     Route::get('site/detail/{site_id}', 'Site\ConfigController@show');
     Route::post('site/detail', 'Site\ConfigController@create');
-
-    Route::get('guest/s/{site}', 'Site\AuthController@index');
 });
+
+Route::get('guest/s/{site}', 'Site\AuthController@index');
 
 Route::controllers([
     'auth' => 'Auth\AuthController',
