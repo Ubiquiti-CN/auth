@@ -45,13 +45,8 @@ class GlobalController extends Controller {
         $user_id = $user->id;
 
         $input = $request->all();
-        $input['dbHost'] = (isset($input['dbHost']) && $input['dbHost']) ? $input['dbHost'] : '127.0.0.1';
-        $input['dbPort'] = (isset($input['dbPort']) && $input['dbPort']) ? $input['dbPort'] : '3306';
 
         $this->validate($request, [
-            'dbPort' => 'integer|between:1024,65535',
-            'dbUsername' => 'required',
-            'dbName' => 'required',
             'controllerHost' => 'required|url',
             'controllerUsername' => 'required',
             'controllerPassword' => 'required',
