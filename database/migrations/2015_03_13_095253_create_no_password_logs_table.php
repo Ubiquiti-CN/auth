@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSiteConfigsTable extends Migration {
+class CreateNoPasswordLogsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,12 @@ class CreateSiteConfigsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('site_configs', function(Blueprint $table)
+		Schema::create('no_password_logs', function(Blueprint $table)
 		{
             $table->increments('id');
-            $table->json('data');
+            $table->string('client_mac', 20);
             $table->integer('user_id');
             $table->string('site', 200);
-            $table->softDeletes();
             $table->timestamps();
 		});
 	}
@@ -30,7 +29,7 @@ class CreateSiteConfigsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('site_configs');
+		Schema::drop('no_password_logs');
 	}
 
 }
