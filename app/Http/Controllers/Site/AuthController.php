@@ -53,7 +53,7 @@ class AuthController extends Controller {
                 $log->save();
                 $api_factory->authorize($unifi_host, $unifi_user, $unifi_password, $site, $client_mac, $expired_time);
                 // todo 跳转广告或默认页面
-                echo "<pre>";var_dump($client_mac);
+        		return view('client/global/ad', ['site_config' => $site_config]);
                 break;
             case 'password'://密码
                 break;
