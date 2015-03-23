@@ -67,6 +67,19 @@ class ConfigController extends Controller {
             'site_id' => 'required',
         ]);
 
+        $auth_type = $input['auth_type'];
+        switch ($auth_type) {
+            case "password":
+                $this->validate($request, [
+                    'password' => 'required',
+                ]);
+                break;
+            case "sms":
+                //TODO 添加sms需要判断内容
+                echo 'sms';
+                break;
+        }
+
         if (isset($input['waitPic'])) {
             $this->validate($request, [
                 'waitPic' => 'required|image|max:1024',

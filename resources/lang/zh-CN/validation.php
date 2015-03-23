@@ -116,6 +116,7 @@ return [
         'waitTime' => '广告等待时间(秒)',
         'redirectUrl' => '跳转页面',
         'authTime' => '授权时间(秒)',
+        'password' => '密码',
     ],
 
 ];
