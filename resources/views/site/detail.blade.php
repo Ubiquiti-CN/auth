@@ -35,7 +35,7 @@
 				</div>
 				<div class="form-group">
 					<label for="redirectUrl">跳转页面</label>
-					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['redirectUrl']; ?>" type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="www.baidu.com">
+					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['redirectUrl']; ?>" type="text" class="form-control" id="redirectUrl" name="redirectUrl" placeholder="http://www.baidu.com">
 				</div>
 				<div class="form-group">
 					<label for="waitTime">广告等待时间(秒)</label>
