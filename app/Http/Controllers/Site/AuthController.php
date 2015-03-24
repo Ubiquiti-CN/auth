@@ -61,7 +61,6 @@ class AuthController extends Controller {
                 // todo 没有 Mac ID 时跳转页面
 
                 $log = new PasswordLog();
-                $log::where('site', '=', $site)->where('client_mac', '=', $client_mac)->delete();
                 $log->client_mac = $client_mac;
                 $log->site = $site;
                 $log->save();
@@ -117,14 +116,22 @@ class AuthController extends Controller {
                 $client_mac = $input['clientMac'];
                 $log = new PasswordLog();
                 $status = (addslashes($site_config['password']) == $client_password) ? 1: 0;
-                if ($status) {
-                    // todo log
 
+                if ($status) {
+                    $log->site = $site;
+                    $log->client_mac = $client_mac;
+                    $log->status = $status;
+                    $log->password = $client_password;
+                    $log->save();
                     $api_factory->authorize($unifi_host, $unifi_user, $unifi_password, $site, $client_mac, $expired_time);
                     // todo 跳转广告或默认页面
                     return view('client/global/ad', ['site_config' => $site_config]);
                 } else {
-                    Notification::error('密码错误！');
+                    $log->site = $site;
+                    $log->client_mac = $client_mac;
+                    $log->status = $status;
+                    $log->password = $client_password;
+                    $log->save();
                     return redirect()->back()->withErrors('密码错误');
                 }
 
