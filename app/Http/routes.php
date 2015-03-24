@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function() {
 });
 
 Route::get('guest/s/{site}', 'Site\AuthController@index');
+Route::post('guest/s/{site}', 'Site\AuthController@create');
 
 Route::controllers([
     'auth' => 'Auth\AuthController',
