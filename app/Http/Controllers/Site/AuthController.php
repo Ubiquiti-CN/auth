@@ -125,8 +125,7 @@ class AuthController extends Controller {
                     return view('client/global/ad', ['site_config' => $site_config]);
                 } else {
                     Notification::error('密码错误！');
-                    //todo 密码错误时
-                    return redirect('');
+                    return redirect()->back()->withErrors('密码错误');
                 }
 
                 break;
