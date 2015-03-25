@@ -11,6 +11,7 @@ use App\Models\SiteConfig;
 use App\Models\NoPasswordLog;
 use App\Models\PasswordLog;
 use Auth;
+use Illuminate\Support\Facades\Log;
 use Notification;
 use Config;
 
@@ -52,14 +53,18 @@ class AuthController extends Controller {
                 $log->client_mac = $client_mac;
                 $log->site = $site;
                 $log->save();
+                Log::info('Controllers/Site/Auth/index', ['site' => $site, 'mac' => $client_mac, 'auth_type' => $site_config['auth_type']]);
                 $api_factory->authorize($unifi_host, $unifi_user, $unifi_password, $site, $client_mac, $expired_time);
                 // todo 跳转广告或默认页面
         		return view('client/global/ad', ['site_config' => $site_config]);
                 break;
             case 'password'://密码
                 $client_mac = isset($input['id']) ? $input['id'] : '';
-                // todo 没有 Mac ID 时跳转页面
-
+                if (!$client_mac) {
+                    // todo 没有 Mac ID 时跳转页面
+                    Log::warning('No client MacID');
+                }
+                Log::info('Controllers/Site/Auth/index', ['site' => $site, 'mac' => $client_mac, 'auth_type' => $site_config['auth_type']]);
                 $log = new PasswordLog();
                 $log->client_mac = $client_mac;
                 $log->site = $site;
@@ -116,7 +121,11 @@ class AuthController extends Controller {
                 $client_mac = $input['clientMac'];
                 $log = new PasswordLog();
                 $status = (addslashes($site_config['password']) == $client_password) ? 1: 0;
-
+                Log::info('Controllers/Site/Auth/create', [
+                    'site' => $site,
+                    'mac' => $client_mac,
+                    'auth_type' => $site_config['auth_type'],
+                    'status' => $status]);
                 if ($status) {
                     $log->site = $site;
                     $log->client_mac = $client_mac;
@@ -132,6 +141,12 @@ class AuthController extends Controller {
                     $log->status = $status;
                     $log->password = $client_password;
                     $log->save();
+                    Log::warning('Controllers/Site/Auth/create', [
+                        'site' => $site,
+                        'mac' => $client_mac,
+                        'auth_type' => $site_config['auth_type'],
+                        'status' => $status,
+                        'wrong_password' => $client_password]);
                     return redirect()->back()->withErrors('密码错误');
                 }
 

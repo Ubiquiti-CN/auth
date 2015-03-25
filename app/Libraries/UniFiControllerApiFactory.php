@@ -6,6 +6,7 @@
  */
 
 use Config;
+use Illuminate\Support\Facades\Log;
 
 class UniFiControllerApiFactory {
 
@@ -81,7 +82,7 @@ abstract class UniFiControllerApi {
 
     public function authorize($server, $user, $password, $site, $mac, $expire_mins) {
         $this->login($server, $user, $password);
-
+        Log::info('Libraries/UniFiControllerApiFactory', ['site' => $site, 'mac' => $mac, 'expire_mins' => $expire_mins]);
         // Send user to authorize and the time allowed
         $data = json_encode(
             array(
