@@ -26,6 +26,8 @@ class UniFiControllerApiFactory {
             case '3.2.10':
                 return new UniFiControllerApiV327();
                 break;
+            case '4.6.0':
+                return new UniFiControllerApiV460();
             default:
                 return new UniFiControllerApiV321();
                 break;
@@ -203,6 +205,127 @@ class UniFiControllerApiV327 extends UniFiControllerApi {
 
     public function get_ssl_version() {
         return 1;
+    }
+
+}
+
+class UniFiControllerApiV460 {
+
+    public function get_cookie_file_path() {
+        return Config::get('unifi.cookie_file_path');
+    }
+
+    public function get_ssl_version() {
+        return 1;
+    }
+
+    public function login($server, $user, $password) {
+        $data = json_encode(
+            array(
+                'username' => $user,
+                'password' => $password,
+            )
+        );
+
+        // Start Curl for login
+        $ch = curl_init();
+        // We are posting data
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        // Set up cookies
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->get_cookie_file_path());
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->get_cookie_file_path());
+        // Allow Self Signed Certs
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // Login to the UniFi controller
+        curl_setopt($ch, CURLOPT_URL, $server . "/api/login");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+    public function get_all_sites($server, $user, $password) {
+        $this->login($server, $user, $password);
+
+        $ch = curl_init();
+        // We are posting data
+        curl_setopt($ch, CURLOPT_HTTPGET, TRUE);
+        // Set up cookies
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->get_cookie_file_path());
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->get_cookie_file_path());
+        // Allow Self Signed Certs
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // Make the API Call
+        curl_setopt($ch, CURLOPT_URL, $server . ' /api/self/sites');
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $this->logout($server);
+
+        $result = json_decode($result, TRUE);
+
+        if ($result['meta']['rc'] == 'error') {
+            throw new UniFiControllerApiException();
+        }
+
+        return $result['data'];
+    }
+
+    public function logout($server) {
+        // Logout of the connection
+        $ch = curl_init();
+        // We are posting data
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        // Set up cookies
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->get_cookie_file_path());
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->get_cookie_file_path());
+        // Allow Self Signed Certs
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // Make the API Call
+        curl_setopt($ch, CURLOPT_URL, $server . '/api/logout');
+        curl_exec($ch);
+        curl_close($ch);
+    }
+
+    public function authorize($server, $user, $password, $site, $mac, $expire_mins) {
+        $this->login($server, $user, $password);
+        Log::info('Libraries/UniFiControllerApiFactory', ['site' => $site, 'mac' => $mac, 'expire_mins' => $expire_mins]);
+        // Send user to authorize and the time allowed
+        $data = json_encode(
+            array(
+                'cmd' => 'authorize-guest',
+                'mac' => $mac,
+                'minutes' => $expire_mins,
+            )
+        );
+        $ch = curl_init();
+        // We are posting data
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        // Set up cookies
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $this->get_cookie_file_path());
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $this->get_cookie_file_path());
+        // Allow Self Signed Certs
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSLVERSION, $this->get_ssl_version());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // Make the API Call
+        curl_setopt($ch, CURLOPT_URL, $server . '/api/s/' . $site . '/cmd/stamgr');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'json=' . $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_exec($ch);
+        curl_close($ch);
+
+        $this->logout($server);
     }
 
 }
