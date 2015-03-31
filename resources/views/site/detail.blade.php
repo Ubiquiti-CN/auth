@@ -30,7 +30,7 @@
 			</div>
 			{!! Form::open(array('enctype' => 'multipart/form-data', 'url' => '/site/detail/')) !!}
 				<div class="form-group">
-					<label for="authTime">授权时间(秒)</label>
+					<label for="authTime">授权时间(分钟)</label>
 					<input value="<?php if (is_array($config) && count($config) > 0) echo $config['authTime']; ?>" type="text" class="form-control" id="authTime" name="authTime" placeholder="3000">
 				</div>
 				<div class="form-group">
