@@ -5,6 +5,12 @@ UniFi 微信、微博和验证码授权上网代码
     v.3.2.1
     v.3.2.5
 
+###v.3.2.7及以上版本，需修改auth/deps/unifi.php中ssl版本(有多处代码)
+    curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+    改为
+    curl_setopt($ch, CURLOPT_SSLVERSION, 1);
+    
+
 ###微信配置和Controller配置
 请参照[优倍快技术论坛](http://bbs.ubnt.com.cn/forum.php?mod=viewthread&tid=9914&page=1)
 
